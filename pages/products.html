@@ -592,7 +592,7 @@
                                     <span class="text-xl font-bold text-gray-900">${jerryTech.formatPrice(product.price)}</span>
                                     ${product.originalPrice ? `<span class="text-sm text-gray-500 line-through">${jerryTech.formatPrice(product.originalPrice)}</span>` : ''}
                                 </div>
-                                <button onclick="addToCart(${product.id})" ${!product.inStock ? 'disabled' : ''} class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed">
+                                <button onclick="addToCartFromList(${product.id})" ${!product.inStock ? 'disabled' : ''} class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed">
                                     <i data-feather="shopping-cart" class="h-4 w-4"></i>
                                 </button>
                             </div>
@@ -714,6 +714,24 @@
                 document.getElementById('list-view').classList.add('text-blue-600', 'bg-blue-50');
                 document.getElementById('grid-view').classList.remove('text-blue-600', 'bg-blue-50');
             });
+        }
+
+        function addToCartFromList(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (product) {
+                jerryTech.addToCart(product);
+            } else {
+                console.error('Product not found:', productId);
+            }
+        }
+
+        function addToCartFromList(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (product) {
+                jerryTech.addToCart(product);
+            } else {
+                console.error('Product not found:', productId);
+            }
         }
 
         function clearFilters() {
