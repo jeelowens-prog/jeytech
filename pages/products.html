@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produits - JerryTech</title>
+    <meta name="description" content="Découvrez tous nos produits technologiques à Delmas 33, Haïti. Smartphones, ordinateurs, accessoires audio et plus encore.">
+    
+    <!-- TailwindCSS -->
+    <link href="../resources/css/styles.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="../resources/js/feather.js"></script>
+    
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif;
+            padding-bottom: 80px; /* Space for bottom navbar on mobile */
+        }
+        .font-display { font-family: 'Poppins', sans-serif; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .filter-active { background-color: #1a73e8; color: white; }
+        
+        /* Bottom Navbar Styles */
+        .bottom-navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(26, 115, 232, 0.1);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .bottom-navbar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 0.5rem;
+            color: #6b7280;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            text-decoration: none;
+        }
+        
+        .bottom-navbar-item:active {
+            transform: scale(0.95);
+        }
+        
+        .bottom-navbar-item.active {
+            color: #1a73e8;
+        }
+        
+        .bottom-navbar-item.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, #1a73e8, #0d47a1);
+            border-radius: 0 0 3px 3px;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        
+        .bottom-navbar-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 0.25rem;
+            transition: all 0.3s ease;
+        }
+        
+        .bottom-navbar-item.active .bottom-navbar-icon {
+            transform: translateY(-2px);
+            filter: drop-shadow(0 2px 4px rgba(26, 115, 232, 0.3));
+        }
+        
+        .bottom-navbar-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .bottom-navbar-item.active .bottom-navbar-label {
+            font-weight: 600;
+        }
+        
+        .bottom-navbar-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 50%;
+            transform: translateX(12px);
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 0.125rem 0.375rem;
+            border-radius: 10px;
+            min-width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: translateX(12px) scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateX(12px) scale(1.05);
+            }
+        }
+        
+        @media (min-width: 768px) {
+            body {
+                padding-bottom: 0;
+            }
+            .bottom-navbar {
+                display: none;
+            }
+        }
+    </style>
+    
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="../index.html" class="flex items-center space-x-2">
+                        <img src="../resources/logo.png" alt="JerryTech" class="h-8 w-auto">
+                        <span class="font-display font-bold text-xl text-gray-900">JerryTech</span>
+                    </a>
+                </div>
+
+                <!-- Navigation Desktop -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="../index.html" class="text-gray-700 hover:text-blue-600 transition-colors">Accueil</a>
+                    <a href="products.html" class="text-blue-600 font-medium">Produits</a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-600 transition-colors">À propos</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-blue-600 transition-colors">Contact</a>
+                </nav>
+
+                <!-- Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- Search -->
+                    <form class="search-form hidden lg:block">
+                        <div class="relative">
+                            <input type="text" placeholder="Rechercher..." class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <i data-feather="search" class="absolute left-3 top-2.5 h-5 w-5 text-gray-400"></i>
+                        </div>
+                    </form>
+
+                    <!-- Cart -->
+                    <a href="cart.html" class="relative cart-icon p-2 text-gray-700 hover:text-blue-600 transition-colors">
+                        <i data-feather="shopping-cart" class="h-6 w-6"></i>
+                        <span class="cart-count absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center" style="display: none;">0</span>
+                    </a>
+
+                    <!-- Auth -->
+                    <div class="auth-buttons">
+                        <a href="account.html" class="login-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                            Connexion
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="bg-white py-8 border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="font-display text-3xl font-bold text-gray-900">Nos produits</h1>
+                    <p class="text-gray-600 mt-2">Découvrez notre sélection de produits technologiques</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <select id="sort-select" class="border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                        <option value="">Trier par</option>
+                        <option value="price-asc">Prix croissant</option>
+                        <option value="price-desc">Prix décroissant</option>
+                        <option value="newest">Nouveautés</option>
+                        <option value="rating">Meilleures notes</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Filters Sidebar -->
+            <aside class="lg:w-64 flex-shrink-0">
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="font-semibold text-lg mb-4">Filtres</h2>
+                    
+                    <!-- Category Filter -->
+                    <div class="mb-6">
+                        <h3 class="font-medium text-gray-900 mb-3">Catégories</h3>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="category-filter rounded text-blue-600 focus:ring-blue-500" value="smartphones">
+                                <span class="ml-2 text-sm text-gray-700">Smartphones</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="category-filter rounded text-blue-600 focus:ring-blue-500" value="ordinateurs">
+                                <span class="ml-2 text-sm text-gray-700">Ordinateurs</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="category-filter rounded text-blue-600 focus:ring-blue-500" value="audio">
+                                <span class="ml-2 text-sm text-gray-700">Audio</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="category-filter rounded text-blue-600 focus:ring-blue-500" value="accessoires">
+                                <span class="ml-2 text-sm text-gray-700">Accessoires</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="category-filter rounded text-blue-600 focus:ring-blue-500" value="vetements">
+                                <span class="ml-2 text-sm text-gray-700">Vêtements</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Price Filter -->
+                    <div class="mb-6">
+                        <h3 class="font-medium text-gray-900 mb-3">Prix</h3>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="price" class="price-filter text-blue-600 focus:ring-blue-500" value="0-25000">
+                                <span class="ml-2 text-sm text-gray-700">Moins de 25,000 HTG</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="price" class="price-filter text-blue-600 focus:ring-blue-500" value="25000-75000">
+                                <span class="ml-2 text-sm text-gray-700">25,000 - 75,000 HTG</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="price" class="price-filter text-blue-600 focus:ring-blue-500" value="75000-150000">
+                                <span class="ml-2 text-sm text-gray-700">75,000 - 150,000 HTG</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="price" class="price-filter text-blue-600 focus:ring-blue-500" value="150000+">
+                                <span class="ml-2 text-sm text-gray-700">Plus de 150,000 HTG</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Brand Filter -->
+                    <div class="mb-6">
+                        <h3 class="font-medium text-gray-900 mb-3">Marques</h3>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="brand-filter rounded text-blue-600 focus:ring-blue-500" value="apple">
+                                <span class="ml-2 text-sm text-gray-700">Apple</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="brand-filter rounded text-blue-600 focus:ring-blue-500" value="samsung">
+                                <span class="ml-2 text-sm text-gray-700">Samsung</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="brand-filter rounded text-blue-600 focus:ring-blue-500" value="xiaomi">
+                                <span class="ml-2 text-sm text-gray-700">Xiaomi</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="brand-filter rounded text-blue-600 focus:ring-blue-500" value="dell">
+                                <span class="ml-2 text-sm text-gray-700">Dell</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button onclick="clearFilters()" class="w-full bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+                        Effacer les filtres
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Products Grid -->
+            <main class="flex-1">
+                <!-- Search Results Bar -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span id="results-count" class="text-gray-600">Chargement...</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <button id="grid-view" class="p-2 text-blue-600 bg-blue-50 rounded">
+                                <i data-feather="grid" class="h-5 w-5"></i>
+                            </button>
+                            <button id="list-view" class="p-2 text-gray-600 hover:text-blue-600 rounded">
+                                <i data-feather="list" class="h-5 w-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products -->
+                <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Products will be loaded here -->
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading" class="text-center py-12">
+                    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                    <p class="mt-2 text-gray-600">Chargement des produits...</p>
+                </div>
+
+                <!-- No Results -->
+                <div id="no-results" class="text-center py-12 hidden">
+                    <i data-feather="search" class="h-16 w-16 text-gray-300 mx-auto mb-4"></i>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Aucun produit trouvé</h3>
+                    <p class="text-gray-600">Essayez de modifier vos filtres ou votre recherche</p>
+                </div>
+
+                <!-- Pagination -->
+                <div id="pagination" class="flex items-center justify-center mt-8 space-x-2">
+                    <!-- Pagination will be generated here -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="resources/logo.png" alt="JerryTech" class="h-8 w-auto filter brightness-0 invert">
+                        <span class="font-display font-bold text-xl">JerryTech</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">Votre boutique technologique de confiance à Delmas 33, Haïti.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i data-feather="facebook" class="h-5 w-5"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i data-feather="twitter" class="h-5 w-5"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i data-feather="instagram" class="h-5 w-5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-semibold mb-4">Produits</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="products.html?category=smartphones" class="hover:text-white transition-colors">Smartphones</a></li>
+                        <li><a href="products.html?category=ordinateurs" class="hover:text-white transition-colors">Ordinateurs</a></li>
+                        <li><a href="products.html?category=audio" class="hover:text-white transition-colors">Audio</a></li>
+                        <li><a href="products.html?category=accessoires" class="hover:text-white transition-colors">Accessoires</a></li>
+                        <li><a href="products.html?category=vetements" class="hover:text-white transition-colors">Vêtements</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-semibold mb-4">Service client</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="contact.html" class="hover:text-white transition-colors">Contactez-nous</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Support technique</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Garantie</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Retours</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-semibold mb-4">Informations</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="about.html" class="hover:text-white transition-colors">À propos</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Conditions d'utilisation</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Politique de confidentialité</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 JerryTech. Tous droits réservés. Delmas 33, Haïti.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bottom Navbar (Mobile Only) -->
+    <nav class="bottom-navbar md:hidden">
+        <div class="flex items-center justify-around max-w-md mx-auto">
+            <a href="index.html" class="bottom-navbar-item">
+                <i data-feather="home" class="bottom-navbar-icon"></i>
+                <span class="bottom-navbar-label">Accueil</span>
+            </a>
+            <a href="products.html" class="bottom-navbar-item active">
+                <i data-feather="grid" class="bottom-navbar-icon"></i>
+                <span class="bottom-navbar-label">Produits</span>
+            </a>
+            <a href="cart.html" class="bottom-navbar-item">
+                <i data-feather="shopping-cart" class="bottom-navbar-icon"></i>
+                <span class="bottom-navbar-label">Panier</span>
+                <span class="cart-count bottom-navbar-badge" style="display: none;">0</span>
+            </a>
+            <a href="about.html" class="bottom-navbar-item">
+                <i data-feather="info" class="bottom-navbar-icon"></i>
+                <span class="bottom-navbar-label">À propos</span>
+            </a>
+            <a href="account.html" class="bottom-navbar-item">
+                <i data-feather="user" class="bottom-navbar-icon"></i>
+                <span class="bottom-navbar-label">Compte</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Scripts -->
+    <script src="../main.js"></script>
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+
+        // Products page state
+        let currentPage = 1;
+        let currentFilters = {
+            categories: [],
+            brands: [],
+            priceRange: '',
+            search: '',
+            sort: ''
+        };
+        let allProducts = [];
+        let filteredProducts = [];
+        let itemsPerPage = 12;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Get search query from URL if present
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchQuery = urlParams.get('search');
+            const categoryQuery = urlParams.get('category');
+            
+            if (searchQuery) {
+                currentFilters.search = searchQuery;
+                document.querySelector('input[type="text"]').value = searchQuery;
+            }
+            
+            if (categoryQuery) {
+                currentFilters.categories = [categoryQuery];
+                document.querySelector(`input[value="${categoryQuery}"]`).checked = true;
+            }
+
+            // Load products
+            await loadProducts();
+            setupEventListeners();
+        });
+
+        async function loadProducts() {
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('products-grid').innerHTML = '';
+            
+            try {
+                allProducts = await jerryTech.getProducts();
+                applyFilters();
+                renderProducts();
+                updateResultsCount();
+            } catch (error) {
+                console.error('Error loading products:', error);
+                jerryTech.showNotification('Erreur lors du chargement des produits', 'error');
+            } finally {
+                document.getElementById('loading').classList.add('hidden');
+            }
+        }
+
+        function applyFilters() {
+            filteredProducts = allProducts.filter(product => {
+                // Category filter
+                if (currentFilters.categories.length > 0) {
+                    if (!currentFilters.categories.includes(product.category.toLowerCase())) {
+                        return false;
+                    }
+                }
+
+                // Brand filter
+                if (currentFilters.brands.length > 0) {
+                    const productBrand = product.brand ? product.brand.toLowerCase() : '';
+                    if (!currentFilters.brands.some(brand => productBrand.includes(brand))) {
+                        return false;
+                    }
+                }
+
+                // Price filter
+                if (currentFilters.priceRange) {
+                    const [min, max] = currentFilters.priceRange.split('-').map(p => p.replace('+', ''));
+                    if (max && product.price > parseInt(max)) return false;
+                    if (min && product.price < parseInt(min)) return false;
+                }
+
+                // Search filter
+                if (currentFilters.search) {
+                    const searchTerm = currentFilters.search.toLowerCase();
+                    const searchableText = `${product.name} ${product.description}`.toLowerCase();
+                    if (!searchableText.includes(searchTerm)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+
+            // Apply sorting
+            if (currentFilters.sort) {
+                switch (currentFilters.sort) {
+                    case 'price-asc':
+                        filteredProducts.sort((a, b) => a.price - b.price);
+                        break;
+                    case 'price-desc':
+                        filteredProducts.sort((a, b) => b.price - a.price);
+                        break;
+                    case 'newest':
+                        filteredProducts.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+                        break;
+                    case 'rating':
+                        filteredProducts.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+                        break;
+                }
+            }
+
+            currentPage = 1;
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('products-grid');
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const productsToShow = filteredProducts.slice(startIndex, endIndex);
+
+            if (productsToShow.length === 0) {
+                document.getElementById('no-results').classList.remove('hidden');
+                container.innerHTML = '';
+            } else {
+                document.getElementById('no-results').classList.add('hidden');
+                container.innerHTML = productsToShow.map(product => `
+                    <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow card-hover overflow-hidden">
+                        <div class="aspect-square bg-gray-100 relative overflow-hidden group">
+                            <a href="product-details.html?id=${product.id}" class="block w-full h-full">
+                                <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            </a>
+                            ${product.originalPrice ? '<div class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">Promo</div>' : ''}
+                            ${!product.inStock ? '<div class="absolute top-2 right-2 bg-gray-500 text-white px-2 py-1 rounded text-xs font-semibold">Rupture</div>' : ''}
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-semibold text-lg mb-2 line-clamp-2">
+                                <a href="product-details.html?id=${product.id}" class="hover:text-blue-600 transition-colors">${product.name}</a>
+                            </h3>
+                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">${product.description}</p>
+                            <div class="flex items-center mb-3">
+                                <div class="flex text-yellow-400">
+                                    ${Array.from({length: 5}, (_, i) => 
+                                        `<i data-feather="star" class="h-4 w-4 ${i < Math.floor(product.rating || 0) ? 'fill-current' : ''}"></i>`
+                                    ).join('')}
+                                </div>
+                                <span class="text-sm text-gray-500 ml-2">(${product.rating || '0'})</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-xl font-bold text-gray-900">${jerryTech.formatPrice(product.price)}</span>
+                                    ${product.originalPrice ? `<span class="text-sm text-gray-500 line-through">${jerryTech.formatPrice(product.originalPrice)}</span>` : ''}
+                                </div>
+                                <button onclick="addToCart(${product.id})" ${!product.inStock ? 'disabled' : ''} class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed">
+                                    <i data-feather="shopping-cart" class="h-4 w-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderPagination();
+            feather.replace();
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+            const paginationContainer = document.getElementById('pagination');
+
+            if (totalPages <= 1) {
+                paginationContainer.innerHTML = '';
+                return;
+            }
+
+            let paginationHTML = '';
+
+            // Previous button
+            if (currentPage > 1) {
+                paginationHTML += `
+                    <button onclick="changePage(${currentPage - 1})" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <i data-feather="chevron-left" class="h-4 w-4"></i>
+                    </button>
+                `;
+            }
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    paginationHTML += `
+                        <button class="px-3 py-2 bg-blue-600 text-white rounded-lg">${i}</button>
+                    `;
+                } else if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 2) {
+                    paginationHTML += `
+                        <button onclick="changePage(${i})" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">${i}</button>
+                    `;
+                } else if (Math.abs(i - currentPage) === 3) {
+                    paginationHTML += `<span class="px-3 py-2">...</span>`;
+                }
+            }
+
+            // Next button
+            if (currentPage < totalPages) {
+                paginationHTML += `
+                    <button onclick="changePage(${currentPage + 1})" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <i data-feather="chevron-right" class="h-4 w-4"></i>
+                    </button>
+                `;
+            }
+
+            paginationContainer.innerHTML = paginationHTML;
+            feather.replace();
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            renderProducts();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateResultsCount() {
+            const count = filteredProducts.length;
+            const resultsText = count === 1 ? '1 produit trouvé' : `${count} produits trouvés`;
+            document.getElementById('results-count').textContent = resultsText;
+        }
+
+        function setupEventListeners() {
+            // Category filters
+            document.querySelectorAll('.category-filter').forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    currentFilters.categories = Array.from(document.querySelectorAll('.category-filter:checked'))
+                        .map(cb => cb.value);
+                    applyFilters();
+                    renderProducts();
+                });
+            });
+
+            // Brand filters
+            document.querySelectorAll('.brand-filter').forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    currentFilters.brands = Array.from(document.querySelectorAll('.brand-filter:checked'))
+                        .map(cb => cb.value);
+                    applyFilters();
+                    renderProducts();
+                });
+            });
+
+            // Price filters
+            document.querySelectorAll('.price-filter').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    currentFilters.priceRange = document.querySelector('.price-filter:checked')?.value || '';
+                    applyFilters();
+                    renderProducts();
+                });
+            });
+
+            // Sort
+            document.getElementById('sort-select').addEventListener('change', (e) => {
+                currentFilters.sort = e.target.value;
+                applyFilters();
+                renderProducts();
+            });
+
+            // View toggles
+            document.getElementById('grid-view').addEventListener('click', () => {
+                document.getElementById('products-grid').className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
+                document.getElementById('grid-view').classList.add('text-blue-600', 'bg-blue-50');
+                document.getElementById('list-view').classList.remove('text-blue-600', 'bg-blue-50');
+            });
+
+            document.getElementById('list-view').addEventListener('click', () => {
+                document.getElementById('products-grid').className = 'grid grid-cols-1 gap-6';
+                document.getElementById('list-view').classList.add('text-blue-600', 'bg-blue-50');
+                document.getElementById('grid-view').classList.remove('text-blue-600', 'bg-blue-50');
+            });
+        }
+
+        function clearFilters() {
+            // Reset all filters
+            currentFilters = {
+                categories: [],
+                brands: [],
+                priceRange: '',
+                search: '',
+                sort: ''
+            };
+
+            // Uncheck all checkboxes
+            document.querySelectorAll('.category-filter, .brand-filter').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.price-filter').forEach(radio => radio.checked = false);
+            
+            // Reset sort
+            document.getElementById('sort-select').value = '';
+
+            // Apply and render
+            applyFilters();
+            renderProducts();
+        }
+    </script>
+</body>
+</html>

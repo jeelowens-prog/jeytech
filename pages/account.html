@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compte - JerryTech</title>
+    <meta name="description" content="Créez votre compte ou connectez-vous chez JerryTech - Delmas 33, Haïti">
+    
+    <!-- TailwindCSS -->
+    <link href="../resources/css/styles.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="../resources/js/feather.js"></script>
+    
+    <style>
+        body{font-family:'Inter',sans-serif;padding-bottom:80px}
+        .font-display{font-family:'Poppins',sans-serif}
+        .tab-active{background-color:#1a73e8;color:white}
+        .form-error{border-color:#ef4444}
+        .form-success{border-color:#10b981}
+        .bottom-navbar{position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(26,115,232,0.1);box-shadow:0 -4px 20px rgba(0,0,0,0.08)}
+        .bottom-navbar-item{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0.75rem 0.5rem;color:#6b7280;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);position:relative;text-decoration:none}
+        .bottom-navbar-item:active{transform:scale(0.95)}
+        .bottom-navbar-item.active{color:#1a73e8}
+        .bottom-navbar-item.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:40px;height:3px;background:linear-gradient(90deg,#1a73e8,#0d47a1);border-radius:0 0 3px 3px;animation:slideDown 0.3s ease}
+        @keyframes slideDown{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+        .bottom-navbar-icon{width:24px;height:24px;margin-bottom:0.25rem;transition:all 0.3s ease}
+        .bottom-navbar-item.active .bottom-navbar-icon{transform:translateY(-2px);filter:drop-shadow(0 2px 4px rgba(26,115,232,0.3))}
+        .bottom-navbar-label{font-size:0.7rem;font-weight:500;transition:all 0.3s ease}
+        .bottom-navbar-item.active .bottom-navbar-label{font-weight:600}
+        .bottom-navbar-badge{position:absolute;top:0.5rem;right:50%;transform:translateX(12px);background:linear-gradient(135deg,#ef4444,#dc2626);color:white;font-size:0.65rem;font-weight:600;padding:0.125rem 0.375rem;border-radius:10px;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(239,68,68,0.4);animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:1;transform:translateX(12px) scale(1)}50%{opacity:0.8;transform:translateX(12px) scale(1.05)}}
+        @media (min-width:768px){body{padding-bottom:0}.bottom-navbar{display:none}}
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="../index.html" class="flex items-center space-x-2">
+                        <img src="../resources/logo.png" alt="JerryTech" class="h-8 w-auto">
+                        <span class="font-display font-bold text-xl text-gray-900">JerryTech</span>
+                    </a>
+                </div>
+
+                <!-- Navigation Desktop -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="../index.html" class="text-gray-700 hover:text-blue-600 transition-colors">Accueil</a>
+                    <a href="products.html" class="text-gray-700 hover:text-blue-600 transition-colors">Produits</a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-600 transition-colors">À propos</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-blue-600 transition-colors">Contact</a>
+                </nav>
+
+                <!-- Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- Search -->
+                    <form class="search-form hidden lg:block">
+                        <div class="relative">
+                            <input type="text" placeholder="Rechercher..." class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <i data-feather="search" class="absolute left-3 top-2.5 h-5 w-5 text-gray-400"></i>
+                        </div>
+                    </form>
+
+                    <!-- Cart -->
+                    <a href="cart.html" class="relative cart-icon p-2 text-gray-700 hover:text-blue-600 transition-colors">
+                        <i data-feather="shopping-cart" class="h-6 w-6"></i>
+                        <span class="cart-count absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center" style="display: none;">0</span>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Welcome Message -->
+        <div class="text-center mb-8">
+            <img src="../resources/logo.png" alt="JerryTech" class="h-12 w-auto mx-auto mb-4">
+            <h1 class="font-display text-3xl font-bold text-gray-900 mb-2">Bienvenue chez JerryTech</h1>
+            <p class="text-gray-600">Connectez-vous ou créez votre compte</p>
+        </div>
+
+        <!-- Auth Container -->
+        <div class="bg-white rounded-lg shadow-sm p-8">
+            <!-- Tabs -->
+            <div class="flex mb-8">
+                <button id="login-tab" onclick="switchTab('login')" class="flex-1 py-3 text-center font-medium rounded-lg transition-colors tab-active">
+                    Connexion
+                </button>
+                <button id="register-tab" onclick="switchTab('register')" class="flex-1 py-3 text-center font-medium rounded-lg transition-colors text-gray-600 hover:text-gray-900">
+                    Inscription
+                </button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" class="space-y-6">
+                <div>
+                    <label for="login-email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input type="email" id="login-email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="votre@email.com">
+                    <div id="login-email-error" class="text-red-500 text-sm mt-1 hidden"></div>
+                </div>
+
+                <div>
+                    <label for="login-password" class="block text-sm font-medium text-gray-700 mb-2">Mot de passe</label>
+                    <input type="password" id="login-password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="••••••••">
+                    <div id="login-password-error" class="text-red-500 text-sm mt-1 hidden"></div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="rounded text-blue-600 focus:ring-blue-500">
+                        <span class="ml-2 text-sm text-gray-600">Se souvenir de moi</span>
+                    </label>
+                    <a href="#" class="text-sm text-blue-600 hover:text-blue-700">Mot de passe oublié?</a>
+                </div>
+
+                <button onclick="login()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                    Se connecter
+                </button>
+
+                <!-- Social Login -->
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">Ou continuer avec</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <button class="flex items-center justify-center py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                        <i data-feather="facebook" class="h-5 w-5 text-blue-600 mr-2"></i>
+                        <span class="text-sm font-medium">Facebook</span>
+                    </button>
+                    <button class="flex items-center justify-center py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                        <i data-feather="mail" class="h-5 w-5 text-red-600 mr-2"></i>
+                        <span class="text-sm font-medium">Google</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-form" class="space-y-6 hidden">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="register-firstname" class="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
+                        <input type="text" id="register-firstname" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="John">
+                        <div id="register-firstname-error" class="text-red-500 text-sm mt-1 hidden"></div>
+                    </div>
+                    <div>
+                        <label for="register-lastname" class="block text-sm font-medium text-gray-700 mb-2">Nom</label>
+                        <input type="text" id="register-lastname" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Doe">
+                        <div id="register-lastname-error" class="text-red-500 text-sm mt-1 hidden"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="register-email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input type="email" id="register-email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="votre@email.com">
+                    <div id="register-email-error" class="text-red-500 text-sm mt-1 hidden"></div>
+                </div>
+
+                <div>
+                    <label for="register-phone" class="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
+                    <input type="tel" id="register-phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="+509 1234-5678">
+                    <div id="register-phone-error" class="text-red-500 text-sm mt-1 hidden"></div>
+                </div>
+
+                <div>
+                    <label for="register-password" class="block text-sm font-medium text-gray-700 mb-2">Mot de passe</label>
+                    <input type="password" id="register-password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="••••••••">
+                    <div id="register-password-error" class="text-red-500 text-sm mt-1 hidden"></div>
+                    <p class="text-xs text-gray-500 mt-1">Minimum 8 caractères, avec au moins une majuscule et un chiffre</p>
+                </div>
+
+                <div>
+                    <label for="register-confirm-password" class="block text-sm font-medium text-gray-700 mb-2">Confirmer le mot de passe</label>
+                    <input type="password" id="register-confirm-password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="••••••••">
+                    <div id="register-confirm-password-error" class="text-red-500 text-sm mt-1 hidden"></div>
+                </div>
+
+                <div class="flex items-start">
+                    <input type="checkbox" id="terms" class="mt-1 rounded text-blue-600 focus:ring-blue-500">
+                    <label for="terms" class="ml-2 text-sm text-gray-600">
+                        J'accepte les <a href="#" class="text-blue-600 hover:text-blue-700">conditions d'utilisation</a> et la <a href="#" class="text-blue-600 hover:text-blue-700">politique de confidentialité</a>
+                    </label>
+                </div>
+
+                <button onclick="register()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                    Créer mon compte
+                </button>
+            </div>
+        </div>
+
+        <!-- Account Dashboard (Hidden by default) -->
+        <div id="account-dashboard" class="hidden">
+            <div class="bg-white rounded-lg shadow-sm p-8">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-feather="user" class="h-8 w-8 text-blue-600"></i>
+                    </div>
+                    <h2 class="font-display text-2xl font-bold text-gray-900 mb-2">Mon compte</h2>
+                    <p class="text-gray-600">Gérez vos informations et commandes</p>
+                </div>
+
+                <!-- User Info -->
+                <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                    <h3 class="font-semibold text-lg mb-4">Informations personnelles</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nom complet</label>
+                            <p id="user-fullname" class="text-gray-900">-</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <p id="user-email" class="text-gray-900">-</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+                            <p id="user-phone" class="text-gray-900">-</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Membre depuis</label>
+                            <p id="user-since" class="text-gray-900">-</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="grid md:grid-cols-3 gap-4 mb-6">
+                    <a href="orders.html" class="bg-blue-50 p-4 rounded-lg hover:bg-blue-100 transition-colors">
+                        <i data-feather="package" class="h-8 w-8 text-blue-600 mb-2"></i>
+                        <h4 class="font-semibold text-blue-900">Mes commandes</h4>
+                        <p class="text-sm text-blue-700">Voir l'historique</p>
+                    </a>
+                    <a href="wishlist.html" class="bg-red-50 p-4 rounded-lg hover:bg-red-100 transition-colors">
+                        <i data-feather="heart" class="h-8 w-8 text-red-600 mb-2"></i>
+                        <h4 class="font-semibold text-red-900">Favoris</h4>
+                        <p class="text-sm text-red-700">Mes produits préférés</p>
+                    </a>
+                    <a href="settings.html" class="bg-green-50 p-4 rounded-lg hover:bg-green-100 transition-colors">
+                        <i data-feather="settings" class="h-8 w-8 text-green-600 mb-2"></i>
+                        <h4 class="font-semibold text-green-900">Paramètres</h4>
+                        <p class="text-sm text-green-700">Modifier mes infos</p>
+                    </a>
+                </div>
+
+                <!-- Logout Button -->
+                <div class="text-center">
+                    <button onclick="logout()" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors">
+                        <i data-feather="log-out" class="h-4 w-4 inline mr-2"></i>
+                        Déconnexion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="../resources/logo.png" alt="JerryTech" class="h-8 w-auto filter brightness-0 invert">
+                        <span class="font-display font-bold text-xl">JerryTech</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">Votre boutique technologique de confiance à Delmas 33, Haïti.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i data-feather="facebook" class="h-5 w-5"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i data-feather="twitter" class="h-5 w-5"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i data-feather="instagram" class="h-5 w-5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-semibold mb-4">Produits</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="products.html?category=smartphones" class="hover:text-white transition-colors">Smartphones</a></li>
+                        <li><a href="products.html?category=ordinateurs" class="hover:text-white transition-colors">Ordinateurs</a></li>
+                        <li><a href="products.html?category=audio" class="hover:text-white transition-colors">Audio</a></li>
+                        <li><a href="products.html?category=accessoires" class="hover:text-white transition-colors">Accessoires</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-semibold mb-4">Service client</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="contact.html" class="hover:text-white transition-colors">Contactez-nous</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Support technique</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Garantie</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Retours</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-semibold mb-4">Informations</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="about.html" class="hover:text-white transition-colors">À propos</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Conditions d'utilisation</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Politique de confidentialité</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 JerryTech. Tous droits réservés. Delmas 33, Haïti.</p>
+            </div>
+        </div>
+    </footer>
+
+    <nav class="bottom-navbar md:hidden"><div class="flex items-center justify-around max-w-md mx-auto"><a href="../index.html" class="bottom-navbar-item"><i data-feather="home" class="bottom-navbar-icon"></i><span class="bottom-navbar-label">Accueil</span></a><a href="products.html" class="bottom-navbar-item"><i data-feather="grid" class="bottom-navbar-icon"></i><span class="bottom-navbar-label">Produits</span></a><a href="cart.html" class="bottom-navbar-item"><i data-feather="shopping-cart" class="bottom-navbar-icon"></i><span class="bottom-navbar-label">Panier</span><span class="cart-count bottom-navbar-badge" style="display:none;">0</span></a><a href="about.html" class="bottom-navbar-item"><i data-feather="info" class="bottom-navbar-icon"></i><span class="bottom-navbar-label">À propos</span></a><a href="account.html" class="bottom-navbar-item active"><i data-feather="user" class="bottom-navbar-icon"></i><span class="bottom-navbar-label">Compte</span></a></div></nav>
+
+    <!-- Scripts -->
+    <script src="../main.js"></script>
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+
+        let currentTab = 'login';
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if user is already logged in
+            const token = localStorage.getItem('authToken');
+            const user = localStorage.getItem('user');
+            
+            if (token && user) {
+                showAccountDashboard(JSON.parse(user));
+            }
+
+            // Check for redirect parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirect = urlParams.get('redirect');
+            if (redirect) {
+                // Store redirect URL for after login
+                sessionStorage.setItem('redirectAfterLogin', redirect);
+            }
+        });
+
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update tabs
+            const loginTab = document.getElementById('login-tab');
+            const registerTab = document.getElementById('register-tab');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            
+            if (tab === 'login') {
+                loginTab.classList.add('tab-active');
+                loginTab.classList.remove('text-gray-600');
+                registerTab.classList.remove('tab-active');
+                registerTab.classList.add('text-gray-600');
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+            } else {
+                registerTab.classList.add('tab-active');
+                registerTab.classList.remove('text-gray-600');
+                loginTab.classList.remove('tab-active');
+                loginTab.classList.add('text-gray-600');
+                registerForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+            }
+        }
+
+        async function login() {
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            // Clear previous errors
+            clearErrors('login');
+
+            // Validation
+            let hasErrors = false;
+            
+            if (!email) {
+                showError('login-email', 'Email requis');
+                hasErrors = true;
+            } else if (!isValidEmail(email)) {
+                showError('login-email', 'Email invalide');
+                hasErrors = true;
+            }
+
+            if (!password) {
+                showError('login-password', 'Mot de passe requis');
+                hasErrors = true;
+            }
+
+            if (hasErrors) return;
+
+            try {
+                const success = await jerryTech.login(email, password);
+                
+                if (success) {
+                    const user = JSON.parse(localStorage.getItem('user') || '{}');
+                    
+                    // Si l'utilisateur est admin, rediriger vers admin
+                    if (user.is_admin) {
+                        jerryTech.showNotification('Connexion admin réussie!', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'admin.html';
+                        }, 1000);
+                        return;
+                    }
+                    
+                    showAccountDashboard(user);
+                    
+                    // Check for redirect
+                    const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
+                    if (redirectUrl) {
+                        sessionStorage.removeItem('redirectAfterLogin');
+                        setTimeout(() => {
+                            window.location.href = `${redirectUrl}.html`;
+                        }, 1500);
+                    }
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                jerryTech.showNotification('Erreur lors de la connexion', 'error');
+            }
+        }
+
+        async function register() {
+            const firstname = document.getElementById('register-firstname').value.trim();
+            const lastname = document.getElementById('register-lastname').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const phone = document.getElementById('register-phone').value.trim();
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            const termsAccepted = document.getElementById('terms').checked;
+
+            // Clear previous errors
+            clearErrors('register');
+
+            // Validation
+            let hasErrors = false;
+
+            if (!firstname) {
+                showError('register-firstname', 'Prénom requis');
+                hasErrors = true;
+            }
+
+            if (!lastname) {
+                showError('register-lastname', 'Nom requis');
+                hasErrors = true;
+            }
+
+            if (!email) {
+                showError('register-email', 'Email requis');
+                hasErrors = true;
+            } else if (!isValidEmail(email)) {
+                showError('register-email', 'Email invalide');
+                hasErrors = true;
+            }
+
+            if (!phone) {
+                showError('register-phone', 'Téléphone requis');
+                hasErrors = true;
+            }
+
+            if (!password) {
+                showError('register-password', 'Mot de passe requis');
+                hasErrors = true;
+            } else if (password.length < 8) {
+                showError('register-password', 'Le mot de passe doit contenir au moins 8 caractères');
+                hasErrors = true;
+            } else if (!/(?=.*[A-Z])(?=.*\d)/.test(password)) {
+                showError('register-password', 'Le mot de passe doit contenir au moins une majuscule et un chiffre');
+                hasErrors = true;
+            }
+
+            if (password !== confirmPassword) {
+                showError('register-confirm-password', 'Les mots de passe ne correspondent pas');
+                hasErrors = true;
+            }
+
+            if (!termsAccepted) {
+                jerryTech.showNotification('Veuillez accepter les conditions d\'utilisation', 'error');
+                hasErrors = true;
+            }
+
+            if (hasErrors) return;
+
+            const userData = {
+                firstname,
+                lastname,
+                email,
+                phone,
+                password
+            };
+
+            try {
+                const success = await jerryTech.register(userData);
+                
+                if (success) {
+                    // Auto-login after registration
+                    setTimeout(() => {
+                        switchTab('login');
+                        document.getElementById('login-email').value = email;
+                        jerryTech.showNotification('Compte créé! Vous pouvez maintenant vous connecter.', 'success');
+                    }, 1500);
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                jerryTech.showNotification('Erreur lors de la création du compte', 'error');
+            }
+        }
+
+        function showAccountDashboard(user) {
+            // Hide auth forms and show dashboard
+            document.querySelector('.max-w-md').classList.add('hidden');
+            document.getElementById('account-dashboard').classList.remove('hidden');
+            
+            // Update user info
+            document.getElementById('user-fullname').textContent = `${user.firstname || ''} ${user.lastname || ''}`.trim() || 'Non spécifié';
+            document.getElementById('user-email').textContent = user.email || 'Non spécifié';
+            document.getElementById('user-phone').textContent = user.phone || 'Non spécifié';
+            document.getElementById('user-since').textContent = user.createdAt ? new Date(user.createdAt).toLocaleDateString('fr-FR') : 'Récemment';
+            
+            feather.replace();
+        }
+
+        function logout() {
+            jerryTech.logout();
+            
+            // Show login form again
+            document.querySelector('.max-w-md').classList.remove('hidden');
+            document.getElementById('account-dashboard').classList.add('hidden');
+            
+            // Reset forms
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-password').value = '';
+            clearErrors('login');
+            clearErrors('register');
+        }
+
+        function showError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const errorElement = document.getElementById(fieldId + '-error');
+            
+            field.classList.add('form-error');
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+        }
+
+        function clearErrors(formType) {
+            const fields = document.querySelectorAll(`[id^="${formType}-"]`);
+            fields.forEach(field => {
+                field.classList.remove('form-error');
+                const errorElement = document.getElementById(field.id + '-error');
+                if (errorElement) {
+                    errorElement.classList.add('hidden');
+                }
+            });
+        }
+
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Form submission on Enter key
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (currentTab === 'login') {
+                    login();
+                } else {
+                    register();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

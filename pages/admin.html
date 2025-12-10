@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - JerryTech</title>
+    <meta name="description" content="Panneau d'administration JerryTech - Gestion des produits, commandes et statistiques">
+    
+    <!-- TailwindCSS -->
+    <link href="../resources/css/styles.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="../resources/js/feather.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-display { font-family: 'Poppins', sans-serif; }
+        .sidebar-item { transition: all 0.2s ease; }
+        .sidebar-item:hover { background-color: #1e40af; }
+        .sidebar-item.active { background-color: #1e40af; }
+        .admin-content { display: none; }
+        .admin-content.active { display: block; }
+        .stat-card { transition: all 0.3s ease; }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header Admin -->
+    <header class="bg-blue-600 text-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="flex items-center space-x-2">
+                        <img src="../resources/logo.png" alt="JerryTech" class="h-8 w-auto filter brightness-0 invert">
+                        <span class="font-display font-bold text-xl">JerryTech Admin</span>
+                    </div>
+                </div>
+
+                <!-- Admin Actions -->
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2 text-sm">
+                        <i data-feather="user" class="h-4 w-4"></i>
+                        <span id="admin-name">Admin</span>
+                    </div>
+                    <button onclick="logoutAdmin()" class="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg text-sm transition-colors">
+                        <i data-feather="log-out" class="h-4 w-4 inline mr-1"></i>
+                        Déconnexion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex h-screen pt-16">
+        <!-- Sidebar -->
+        <div class="w-64 bg-blue-600 text-white flex-shrink-0 overflow-y-auto">
+            <nav class="p-4 space-y-2">
+                <button onclick="showSection('dashboard')" class="sidebar-item active w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3">
+                    <i data-feather="home" class="h-5 w-5"></i>
+                    <span>Tableau de bord</span>
+                </button>
+                
+                <button onclick="showSection('products')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3">
+                    <i data-feather="package" class="h-5 w-5"></i>
+                    <span>Produits</span>
+                    <span id="products-count" class="ml-auto bg-blue-800 text-xs px-2 py-1 rounded-full">0</span>
+                </button>
+                
+                <button onclick="showSection('orders')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3">
+                    <i data-feather="shopping-cart" class="h-5 w-5"></i>
+                    <span>Commandes</span>
+                    <span id="orders-count" class="ml-auto bg-blue-800 text-xs px-2 py-1 rounded-full">0</span>
+                </button>
+                
+                <button onclick="showSection('customers')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3">
+                    <i data-feather="users" class="h-5 w-5"></i>
+                    <span>Clients</span>
+                    <span id="customers-count" class="ml-auto bg-blue-800 text-xs px-2 py-1 rounded-full">0</span>
+                </button>
+                
+                <button onclick="showSection('events')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3">
+                    <i data-feather="calendar" class="h-5 w-5"></i>
+                    <span>Événements</span>
+                </button>
+                
+                <button onclick="showSection('analytics')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3">
+                    <i data-feather="bar-chart-2" class="h-5 w-5"></i>
+                    <span>Analytiques</span>
+                </button>
+                
+                <button onclick="showSection('settings')" class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3">
+                    <i data-feather="settings" class="h-5 w-5"></i>
+                    <span>Paramètres</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-y-auto">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="admin-content active p-6">
+                <div class="mb-6">
+                    <h1 class="font-display text-3xl font-bold text-gray-900">Tableau de bord</h1>
+                    <p class="text-gray-600">Vue d'ensemble de votre boutique JerryTech</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stat-card bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <i data-feather="shopping-cart" class="h-6 w-6 text-blue-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm text-gray-600">Commandes du jour</p>
+                                <p id="today-orders" class="text-2xl font-bold text-gray-900">12</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                <i data-feather="dollar-sign" class="h-6 w-6 text-green-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm text-gray-600">Revenus du jour</p>
+                                <p id="today-revenue" class="text-2xl font-bold text-gray-900">45,230 HTG</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                <i data-feather="users" class="h-6 w-6 text-purple-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm text-gray-600">Nouveaux clients</p>
+                                <p id="new-customers" class="text-2xl font-bold text-gray-900">8</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                                <i data-feather="package" class="h-6 w-6 text-orange-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm text-gray-600">Produits en stock</p>
+                                <p id="stock-products" class="text-2xl font-bold text-gray-900">156</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="grid lg:grid-cols-2 gap-6 mb-8">
+                    <!-- Revenue Chart -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="font-semibold text-lg mb-4">Revenus des 7 derniers jours</h3>
+                        <canvas id="revenue-chart" width="400" height="200"></canvas>
+                    </div>
+
+                    <!-- Orders Chart -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="font-semibold text-lg mb-4">Commandes par catégorie</h3>
+                        <canvas id="orders-chart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Orders Table -->
+                <div class="bg-white rounded-lg shadow-sm">
+                    <div class="p-6 border-b">
+                        <h3 class="font-semibold text-lg">Commandes récentes</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Commande</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Client</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Statut</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-orders" class="bg-white divide-y divide-gray-200">
+                                <!-- Orders will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Management Section -->
+            <div id="products-section" class="admin-content p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h1 class="font-display text-3xl font-bold text-gray-900">Gestion des produits</h1>
+                        <p class="text-gray-600">Ajoutez, modifiez et supprimez vos produits</p>
+                    </div>
+                    <button onclick="showAddProductModal()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i data-feather="plus" class="h-5 w-5 inline mr-2"></i>
+                        Ajouter un produit
+                    </button>
+                </div>
+
+                <!-- Products Table -->
+                <div class="bg-white rounded-lg shadow-sm">
+                    <div class="p-6 border-b">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-semibold text-lg">Liste des produits</h3>
+                            <div class="flex items-center space-x-4">
+                                <input type="text" id="product-search" placeholder="Rechercher un produit..." 
+                                       class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <select id="category-filter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                    <option value="">Toutes catégories</option>
+                                    <option value="smartphones">Smartphones</option>
+                                    <option value="ordinateurs">Ordinateurs</option>
+                                    <option value="audio">Audio</option>
+                                    <option value="accessoires">Accessoires</option>
+                                    <option value="vetements">Vêtements</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produit</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Prix</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stock</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Statut</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table" class="bg-white divide-y divide-gray-200">
+                                <!-- Products will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Management Section -->
+            <div id="orders-section" class="admin-content p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h1 class="font-display text-3xl font-bold text-gray-900">Gestion des commandes</h1>
+                        <p class="text-gray-600">Suivez et gérez toutes vos commandes</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <select id="status-filter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <option value="">Tous les statuts</option>
+                            <option value="pending">En attente</option>
+                            <option value="processing">En cours</option>
+                            <option value="completed">Terminée</option>
+                            <option value="cancelled">Annulée</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Orders Table -->
+                <div class="bg-white rounded-lg shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Commande</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Client</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produits</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Statut</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-table" class="bg-white divide-y divide-gray-200">
+                                <!-- Orders will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other sections will be added here -->
+            <div id="customers-section" class="admin-content p-6">
+                <div class="text-center py-12">
+                    <i data-feather="users" class="h-16 w-16 text-gray-300 mx-auto mb-4"></i>
+                    <h2 class="text-2xl font-semibold text-gray-900 mb-2">Gestion des clients</h2>
+                    <p class="text-gray-600">Cette section sera bientôt disponible</p>
+                </div>
+            </div>
+
+            <div id="events-section" class="admin-content p-6">
+                <div class="text-center py-12">
+                    <i data-feather="calendar" class="h-16 w-16 text-gray-300 mx-auto mb-4"></i>
+                    <h2 class="text-2xl font-semibold text-gray-900 mb-2">Gestion des événements</h2>
+                    <p class="text-gray-600">Cette section sera bientôt disponible</p>
+                </div>
+            </div>
+
+            <div id="analytics-section" class="admin-content p-6">
+                <div class="text-center py-12">
+                    <i data-feather="bar-chart-2" class="h-16 w-16 text-gray-300 mx-auto mb-4"></i>
+                    <h2 class="text-2xl font-semibold text-gray-900 mb-2">Analytiques détaillées</h2>
+                    <p class="text-gray-600">Cette section sera bientôt disponible</p>
+                </div>
+            </div>
+
+            <div id="settings-section" class="admin-content p-6">
+                <div class="text-center py-12">
+                    <i data-feather="settings" class="h-16 w-16 text-gray-300 mx-auto mb-4"></i>
+                    <h2 class="text-2xl font-semibold text-gray-900 mb-2">Paramètres</h2>
+                    <p class="text-gray-600">Cette section sera bientôt disponible</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div id="add-product-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
+            <div class="p-6 border-b">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold">Ajouter un produit</h3>
+                    <button onclick="hideAddProductModal()" class="text-gray-400 hover:text-gray-600">
+                        <i data-feather="x" class="h-6 w-6"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <form id="add-product-form" class="p-6 space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nom du produit *</label>
+                        <input type="text" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Catégorie *</label>
+                        <select id="category-select" name="category" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Chargement...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <textarea name="description" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Prix (HTG) *</label>
+                        <input type="number" name="price" required min="0" step="1" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Prix original (HTG)</label>
+                        <input type="number" name="originalPrice" min="0" step="1" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Stock *</label>
+                        <input type="number" name="stock" required min="0" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Marque</label>
+                        <input type="text" name="brand" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Note (0-5)</label>
+                        <input type="number" name="rating" min="0" max="5" step="0.1" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                </div>
+
+                <!-- Image Upload Section -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Images du produit <span class="text-gray-400 font-normal">(La première sera l'image principale)</span></label>
+                    
+                    <!-- Upload mode tabs -->
+                    <div class="flex space-x-2 mb-3">
+                        <button type="button" id="upload-tab" onclick="switchImageTab('upload')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors">
+                            <i data-feather="upload" class="h-4 w-4 inline mr-1"></i>
+                            Uploader
+                        </button>
+                        <button type="button" id="url-tab" onclick="switchImageTab('url')" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors hover:bg-gray-300">
+                            <i data-feather="link" class="h-4 w-4 inline mr-1"></i>
+                            Lien URL
+                        </button>
+                    </div>
+                    
+                    <!-- File upload section -->
+                    <div id="upload-section">
+                        <div id="drop-zone" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-all">
+                            <i data-feather="upload-cloud" class="h-10 w-10 mx-auto text-gray-400 mb-2"></i>
+                            <p class="text-gray-600 text-sm">Glissez vos images ici ou <span class="text-blue-600 font-medium">cliquez pour sélectionner</span></p>
+                            <p class="text-gray-400 text-xs mt-1">PNG, JPG, WebP (max 10MB par image) • Plusieurs images autorisées</p>
+                            <input type="file" id="image-file-input" name="image_files" accept="image/png,image/jpeg,image/webp,image/gif" multiple class="hidden">
+                        </div>
+                    </div>
+                    
+                    <!-- URL input section -->
+                    <div id="url-section" class="hidden">
+                        <input type="url" id="image-url-input" name="image_url" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="https://example.com/image.jpg">
+                    </div>
+                    
+                    <!-- Image gallery preview (for multiple images) -->
+                    <div id="image-gallery" class="hidden mt-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <p class="text-sm font-medium text-gray-700"><span id="image-count">0</span> image(s) sélectionnée(s)</p>
+                            <button type="button" onclick="clearAllImages()" class="text-red-500 text-sm hover:text-red-700">
+                                <i data-feather="trash-2" class="h-4 w-4 inline mr-1"></i>
+                                Tout supprimer
+                            </button>
+                        </div>
+                        <div id="image-gallery-grid" class="grid grid-cols-4 gap-2">
+                            <!-- Image thumbnails will be added here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Single image preview (for URL) -->
+                    <div id="image-preview" class="hidden mt-4 flex items-center space-x-4">
+                        <img id="preview-img" src="" alt="Aperçu" class="w-24 h-24 object-cover rounded-lg border border-gray-200 shadow-sm">
+                        <div>
+                            <p id="preview-filename" class="text-sm font-medium text-gray-700"></p>
+                            <button type="button" onclick="removeImagePreview()" class="text-red-500 text-sm hover:text-red-700 mt-1">
+                                <i data-feather="trash-2" class="h-4 w-4 inline mr-1"></i>
+                                Supprimer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="featured-checkbox" name="featured" class="rounded text-blue-600 focus:ring-blue-500">
+                        <label class="ml-2 text-sm text-gray-700">Produit vedette</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" name="inStock" checked class="rounded text-blue-600 focus:ring-blue-500">
+                        <label class="ml-2 text-sm text-gray-700">Produit en stock</label>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-4">
+                    <button type="button" onclick="hideAddProductModal()" class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                        Annuler
+                    </button>
+                    <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        Ajouter le produit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../main.js"></script>
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+
+        // Admin functionality
+        let currentSection = 'dashboard';
+        let adminToken = localStorage.getItem('authToken');
+        let apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? 'http://localhost:8000' 
+            : 'https://api.jerrytech.ht';
+
+        // Initialize admin panel
+        document.addEventListener('DOMContentLoaded', async () => {
+            const isAuthenticated = await checkAdminAuth();
+            if (isAuthenticated) {
+                initializeCharts();
+                await loadDashboardData();
+            } else {
+                // Rediriger vers la page de connexion si non authentifié
+                window.location.href = 'account.html?redirect=admin';
+            }
+        });
+
+        async function checkAdminAuth() {
+            adminToken = localStorage.getItem('authToken');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            
+            if (!adminToken || !user.is_admin) {
+                // Demander la connexion admin
+                alert('Veuillez vous connecter en tant qu\'administrateur');
+                window.location.href = 'account.html?redirect=admin';
+                return false;
+            }
+            
+            // Set admin name
+            document.getElementById('admin-name').textContent = user.name || 'Admin JerryTech';
+            return true;
+        }
+
+        async function apiRequest(endpoint, options = {}) {
+            const url = `${apiBaseUrl}${endpoint}`;
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+            
+            if (adminToken) {
+                headers['Authorization'] = `Bearer ${adminToken}`;
+            }
+            
+            try {
+                const response = await fetch(url, {
+                    ...options,
+                    headers
+                });
+                
+                if (response.status === 401) {
+                    // Token expiré ou invalide
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('user');
+                    window.location.href = 'account.html?redirect=admin';
+                    return null;
+                }
+                
+                if (!response.ok) {
+                    const error = await response.json().catch(() => ({ detail: 'Erreur inconnue' }));
+                    throw new Error(error.detail || `Erreur ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                jerryTech.showNotification(error.message || 'Erreur de connexion à l\'API', 'error');
+                return null;
+            }
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.admin-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.add('active');
+            
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.sidebar-item').classList.add('active');
+            
+            currentSection = sectionName;
+            
+            // Load section data
+            switch(sectionName) {
+                case 'products':
+                    loadProductsData();
+                    break;
+                case 'orders':
+                    loadOrdersData();
+                    break;
+                case 'dashboard':
+                    loadDashboardData();
+                    break;
+            }
+        }
+
+        async function loadDashboardData() {
+            try {
+                // Charger les commandes pour les statistiques
+                const orders = await apiRequest('/api/orders');
+                const products = await apiRequest('/api/products');
+                
+                if (orders && products) {
+                    // Calculer les statistiques
+                    const today = new Date().toISOString().split('T')[0];
+                    const todayOrders = orders.filter(o => o.created_at.startsWith(today));
+                    const todayRevenue = todayOrders.reduce((sum, o) => sum + o.total, 0);
+                    
+                    // Compter les produits en stock
+                    const inStockProducts = products.filter(p => p.in_stock && p.stock > 0).length;
+                    
+                    // Afficher les statistiques
+                    document.getElementById('today-orders').textContent = todayOrders.length;
+                    document.getElementById('today-revenue').textContent = jerryTech.formatPrice(todayRevenue);
+                    document.getElementById('new-customers').textContent = '0'; // À implémenter avec les utilisateurs
+                    document.getElementById('stock-products').textContent = inStockProducts;
+                    
+                    // Charger les commandes récentes
+                    loadRecentOrders(orders.slice(0, 5));
+                }
+            } catch (error) {
+                console.error('Erreur chargement dashboard:', error);
+            }
+        }
+
+        function loadRecentOrders(orders) {
+            if (!orders || orders.length === 0) {
+                document.getElementById('recent-orders').innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">Aucune commande récente</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            const ordersHTML = orders.map(order => {
+                const date = new Date(order.created_at).toLocaleDateString('fr-FR');
+                const user = order.user_id || 'Client';
+                return `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#${order.id}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${jerryTech.formatPrice(order.total)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status)}">
+                                ${getStatusText(order.status)}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${date}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button onclick="viewOrder(${order.id})" class="text-blue-600 hover:text-blue-900 mr-2">Voir</button>
+                            <button onclick="updateOrderStatus(${order.id})" class="text-green-600 hover:text-green-900">Statut</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('recent-orders').innerHTML = ordersHTML;
+        }
+
+        async function loadProductsData() {
+            try {
+                const products = await apiRequest('/api/products');
+                
+                if (!products || products.length === 0) {
+                    document.getElementById('products-table').innerHTML = `
+                        <tr>
+                            <td colspan="6" class="px-6 py-4 text-center text-gray-500">Aucun produit trouvé</td>
+                        </tr>
+                    `;
+                    document.getElementById('products-count').textContent = '0';
+                    return;
+                }
+
+                const productsHTML = products.map(product => {
+                    const date = new Date(product.created_at).toLocaleDateString('fr-FR');
+                    const status = product.in_stock && product.stock > 0 ? 'active' : 'out_of_stock';
+                    return `
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <img src="${product.image || 'https://via.placeholder.com/40x40'}" alt="${product.name}" 
+                                         class="w-10 h-10 rounded-lg object-cover">
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">${product.name}</div>
+                                        <div class="text-xs text-gray-500">${product.category}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${jerryTech.formatPrice(product.price)}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${product.stock}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getProductStatusColor(status)}">
+                                    ${getProductStatusText(status)}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${date}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button onclick="editProduct(${product.id})" class="text-blue-600 hover:text-blue-900 mr-2">Modifier</button>
+                                <button onclick="deleteProduct(${product.id})" class="text-red-600 hover:text-red-900">Supprimer</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+                document.getElementById('products-table').innerHTML = productsHTML;
+                document.getElementById('products-count').textContent = products.length;
+            } catch (error) {
+                console.error('Erreur chargement produits:', error);
+                jerryTech.showNotification('Erreur lors du chargement des produits', 'error');
+            }
+        }
+
+        async function loadOrdersData() {
+            try {
+                const orders = await apiRequest('/api/orders');
+                
+                if (!orders || orders.length === 0) {
+                    document.getElementById('orders-table').innerHTML = `
+                        <tr>
+                            <td colspan="7" class="px-6 py-4 text-center text-gray-500">Aucune commande trouvée</td>
+                        </tr>
+                    `;
+                    document.getElementById('orders-count').textContent = '0';
+                    return;
+                }
+
+                const ordersHTML = orders.map(order => {
+                    const date = new Date(order.created_at).toLocaleDateString('fr-FR');
+                    const itemsCount = order.items ? order.items.length : 0;
+                    return `
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#${order.id}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Client #${order.user_id}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemsCount} article(s)</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${jerryTech.formatPrice(order.total)}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status)}">
+                                    ${getStatusText(order.status)}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${date}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button onclick="viewOrder(${order.id})" class="text-blue-600 hover:text-blue-900 mr-2">Voir</button>
+                                <button onclick="updateOrderStatus(${order.id})" class="text-green-600 hover:text-green-900">Statut</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+                document.getElementById('orders-table').innerHTML = ordersHTML;
+                document.getElementById('orders-count').textContent = orders.length;
+            } catch (error) {
+                console.error('Erreur chargement commandes:', error);
+                jerryTech.showNotification('Erreur lors du chargement des commandes', 'error');
+            }
+        }
+
+        async function initializeCharts() {
+            try {
+                const orders = await apiRequest('/api/orders');
+                const products = await apiRequest('/api/products');
+                
+                if (!orders || !products) return;
+                
+                // Calculer les revenus des 7 derniers jours
+                const last7Days = [];
+                const revenueData = [];
+                for (let i = 6; i >= 0; i--) {
+                    const date = new Date();
+                    date.setDate(date.getDate() - i);
+                    const dateStr = date.toISOString().split('T')[0];
+                    last7Days.push(date.toLocaleDateString('fr-FR', { weekday: 'short' }));
+                    
+                    const dayRevenue = orders
+                        .filter(o => o.created_at.startsWith(dateStr))
+                        .reduce((sum, o) => sum + o.total, 0);
+                    revenueData.push(dayRevenue);
+                }
+                
+                // Revenue Chart
+                const revenueCtx = document.getElementById('revenue-chart').getContext('2d');
+                new Chart(revenueCtx, {
+                    type: 'line',
+                    data: {
+                        labels: last7Days,
+                        datasets: [{
+                            label: 'Revenus (HTG)',
+                            data: revenueData,
+                            borderColor: '#1a73e8',
+                            backgroundColor: 'rgba(26, 115, 232, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value.toLocaleString() + ' HTG';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Calculer les commandes par catégorie
+                const categoryCounts = {};
+                orders.forEach(order => {
+                    if (order.items) {
+                        order.items.forEach(item => {
+                            const product = products.find(p => p.id === item.product_id);
+                            if (product) {
+                                categoryCounts[product.category] = (categoryCounts[product.category] || 0) + item.quantity;
+                            }
+                        });
+                    }
+                });
+                
+                const categories = Object.keys(categoryCounts);
+                const categoryData = categories.map(cat => categoryCounts[cat]);
+                
+                // Orders Chart
+                const ordersCtx = document.getElementById('orders-chart').getContext('2d');
+                new Chart(ordersCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: categories.length > 0 ? categories : ['Aucune commande'],
+                        datasets: [{
+                            data: categoryData.length > 0 ? categoryData : [1],
+                            backgroundColor: ['#1a73e8', '#34a853', '#fbbc04', '#ea4335', '#9c27b0']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Erreur initialisation graphiques:', error);
+            }
+        }
+
+        // Modal functions
+        function showAddProductModal() {
+            document.getElementById('add-product-modal').classList.remove('hidden');
+            loadCategories(); // Charger les catégories
+        }
+
+        function hideAddProductModal() {
+            document.getElementById('add-product-modal').classList.add('hidden');
+            const form = document.getElementById('add-product-form');
+            form.reset();
+            delete form.dataset.editId;
+            document.querySelector('#add-product-modal h3').textContent = 'Ajouter un produit';
+            // Reset image upload state
+            removeImagePreview();
+            switchImageTab('upload');
+            // Clear multi-image selection
+            selectedImageFiles = [];
+            document.getElementById('image-gallery').classList.add('hidden');
+        }
+
+        // Load categories for select
+        async function loadCategories() {
+            try {
+                const categories = await apiRequest('/api/categories');
+                const select = document.getElementById('category-select');
+                if (categories && categories.length > 0) {
+                    select.innerHTML = '<option value="">Sélectionner une catégorie</option>';
+                    categories.forEach(cat => {
+                        const option = document.createElement('option');
+                        option.value = cat.slug;
+                        option.textContent = cat.name;
+                        select.appendChild(option);
+                    });
+                } else {
+                    select.innerHTML = '<option value="">Aucune catégorie disponible</option>';
+                }
+            } catch (error) {
+                console.error('Erreur chargement catégories:', error);
+            }
+        }
+
+        // Image tab switching
+        function switchImageTab(tab) {
+            const uploadTab = document.getElementById('upload-tab');
+            const urlTab = document.getElementById('url-tab');
+            const uploadSection = document.getElementById('upload-section');
+            const urlSection = document.getElementById('url-section');
+            
+            if (tab === 'upload') {
+                uploadTab.classList.remove('bg-gray-200', 'text-gray-700');
+                uploadTab.classList.add('bg-blue-600', 'text-white');
+                urlTab.classList.remove('bg-blue-600', 'text-white');
+                urlTab.classList.add('bg-gray-200', 'text-gray-700');
+                uploadSection.classList.remove('hidden');
+                urlSection.classList.add('hidden');
+            } else {
+                urlTab.classList.remove('bg-gray-200', 'text-gray-700');
+                urlTab.classList.add('bg-blue-600', 'text-white');
+                uploadTab.classList.remove('bg-blue-600', 'text-white');
+                uploadTab.classList.add('bg-gray-200', 'text-gray-700');
+                urlSection.classList.remove('hidden');
+                uploadSection.classList.add('hidden');
+            }
+            feather.replace();
+        }
+        
+        // Remove image preview
+        function removeImagePreview() {
+            document.getElementById('image-file-input').value = '';
+            document.getElementById('image-url-input').value = '';
+            document.getElementById('image-preview').classList.add('hidden');
+            document.getElementById('preview-img').src = '';
+            document.getElementById('preview-filename').textContent = '';
+        }
+        
+        // Initialize drag and drop after DOM loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('image-file-input');
+            
+            if (dropZone && fileInput) {
+                // Click to select file
+                dropZone.addEventListener('click', () => fileInput.click());
+                
+                // Drag events
+                dropZone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    dropZone.classList.add('border-blue-500', 'bg-blue-50');
+                });
+                
+                dropZone.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+                });
+                
+                dropZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        handleMultipleFiles(files);
+                    }
+                });
+            }
+        });
+        
+        // Store selected files globally
+        let selectedImageFiles = [];
+        
+        // Handle file preview
+        function handleFilePreview(file) {
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview-img').src = e.target.result;
+                    document.getElementById('preview-filename').textContent = file.name;
+                    document.getElementById('image-preview').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // Handle multiple files - add to gallery
+        function handleMultipleFiles(files) {
+            const imageFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+            if (imageFiles.length === 0) return;
+            
+            // Add new files to selected files
+            selectedImageFiles = [...selectedImageFiles, ...imageFiles];
+            updateImageGallery();
+        }
+        
+        // Update the image gallery display
+        function updateImageGallery() {
+            const gallery = document.getElementById('image-gallery');
+            const grid = document.getElementById('image-gallery-grid');
+            const countEl = document.getElementById('image-count');
+            
+            if (selectedImageFiles.length === 0) {
+                gallery.classList.add('hidden');
+                return;
+            }
+            
+            gallery.classList.remove('hidden');
+            countEl.textContent = selectedImageFiles.length;
+            
+            grid.innerHTML = '';
+            selectedImageFiles.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const div = document.createElement('div');
+                    div.className = 'relative aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 ' + 
+                                   (index === 0 ? 'border-blue-500' : 'border-transparent');
+                    div.innerHTML = `
+                        <img src="${e.target.result}" alt="${file.name}" class="w-full h-full object-cover">
+                        ${index === 0 ? '<span class="absolute top-1 left-1 bg-blue-500 text-white text-xs px-1 rounded">Principal</span>' : ''}
+                        <button type="button" onclick="removeImageAt(${index})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600">×</button>
+                    `;
+                    grid.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+            feather.replace();
+        }
+        
+        // Remove image at specific index
+        function removeImageAt(index) {
+            selectedImageFiles.splice(index, 1);
+            updateImageGallery();
+        }
+        
+        // Clear all images
+        function clearAllImages() {
+            selectedImageFiles = [];
+            document.getElementById('image-file-input').value = '';
+            document.getElementById('image-gallery').classList.add('hidden');
+        }
+
+        // Image preview from file input
+        document.getElementById('image-file-input')?.addEventListener('change', function(e) {
+            const files = e.target.files;
+            if (files.length > 0) {
+                handleMultipleFiles(files);
+            }
+        });
+
+        // Image preview from URL input
+        document.getElementById('image-url-input')?.addEventListener('input', function(e) {
+            const url = e.target.value;
+            if (url && url.startsWith('http')) {
+                document.getElementById('preview-img').src = url;
+                document.getElementById('preview-filename').textContent = 'Image externe';
+                document.getElementById('image-preview').classList.remove('hidden');
+            } else {
+                document.getElementById('image-preview').classList.add('hidden');
+            }
+        });
+
+        // Product form submission
+        document.getElementById('add-product-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const form = e.target;
+            const formData = new FormData(form);
+            const isEdit = form.dataset.editId;
+            
+            // Préparer les données pour l'API avec FormData pour l'upload
+            const apiFormData = new FormData();
+            apiFormData.append('name', formData.get('name'));
+            apiFormData.append('category', formData.get('category'));
+            apiFormData.append('description', formData.get('description') || '');
+            apiFormData.append('price', formData.get('price'));
+            if (formData.get('originalPrice')) {
+                apiFormData.append('original_price', formData.get('originalPrice'));
+            }
+            apiFormData.append('stock', formData.get('stock'));
+            if (formData.get('brand')) {
+                apiFormData.append('brand', formData.get('brand'));
+            }
+            apiFormData.append('rating', formData.get('rating') || '0');
+            apiFormData.append('featured', formData.has('featured') ? 'true' : 'false');
+            apiFormData.append('in_stock', formData.has('inStock') ? 'true' : 'false');
+            
+            // Gérer les images (fichiers multiples ou URL)
+            const imageUrl = document.getElementById('image-url-input').value;
+            
+            console.log('Selected files:', selectedImageFiles);
+            // alert('Sending ' + selectedImageFiles.length + ' files'); // Debug
+            
+            if (selectedImageFiles.length > 0) {
+                // Ajouter tous les fichiers images sélectionnés
+                selectedImageFiles.forEach(file => {
+                    apiFormData.append('image_files', file);
+                });
+            } else if (imageUrl) {
+                apiFormData.append('image_url', imageUrl);
+            }
+
+            try {
+                let result;
+                const url = isEdit ? `${apiBaseUrl}/api/products/${isEdit}` : `${apiBaseUrl}/api/products`;
+                const method = isEdit ? 'PUT' : 'POST';
+                
+                const headers = {
+                    'Authorization': `Bearer ${adminToken}`
+                };
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: headers,
+                    body: apiFormData
+                });
+                
+                if (response.status === 401) {
+                    window.location.href = 'account.html?redirect=admin';
+                    return;
+                }
+                
+                if (!response.ok) {
+                    const error = await response.json().catch(() => ({ detail: 'Erreur inconnue' }));
+                    throw new Error(error.detail || `Erreur ${response.status}`);
+                }
+                
+                result = await response.json();
+
+                if (result) {
+                    jerryTech.showNotification(`Produit ${isEdit ? 'modifié' : 'ajouté'} avec succès!`, 'success');
+                    hideAddProductModal();
+                    await loadProductsData(); // Reload products
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                jerryTech.showNotification(`Erreur lors de ${isEdit ? 'la modification' : "l'ajout"} du produit: ${error.message}`, 'error');
+            }
+        });
+
+        // Utility functions
+        function getStatusColor(status) {
+            switch(status) {
+                case 'completed': return 'bg-green-100 text-green-800';
+                case 'processing': return 'bg-blue-100 text-blue-800';
+                case 'pending': return 'bg-yellow-100 text-yellow-800';
+                case 'cancelled': return 'bg-red-100 text-red-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+
+        function getStatusText(status) {
+            switch(status) {
+                case 'completed': return 'Terminée';
+                case 'processing': return 'En cours';
+                case 'pending': return 'En attente';
+                case 'cancelled': return 'Annulée';
+                default: return status;
+            }
+        }
+
+        function getProductStatusColor(status) {
+            switch(status) {
+                case 'active': return 'bg-green-100 text-green-800';
+                case 'out_of_stock': return 'bg-red-100 text-red-800';
+                case 'inactive': return 'bg-gray-100 text-gray-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+
+        function getProductStatusText(status) {
+            switch(status) {
+                case 'active': return 'Actif';
+                case 'out_of_stock': return 'Rupture';
+                case 'inactive': return 'Inactif';
+                default: return status;
+            }
+        }
+
+        // Action functions
+        async function viewOrder(orderId) {
+            const order = await apiRequest(`/api/orders`);
+            if (order) {
+                const foundOrder = Array.isArray(order) ? order.find(o => o.id === orderId) : order;
+                if (foundOrder) {
+                    alert(`Commande #${foundOrder.id}\nTotal: ${jerryTech.formatPrice(foundOrder.total)}\nStatut: ${getStatusText(foundOrder.status)}\nDate: ${new Date(foundOrder.created_at).toLocaleDateString('fr-FR')}`);
+                }
+            }
+        }
+
+        function editOrder(orderId) {
+            jerryTech.showNotification(`Modification de la commande ${orderId}`, 'info');
+        }
+
+        async function editProduct(productId) {
+            const product = await apiRequest(`/api/products/${productId}`);
+            if (product) {
+                // Charger les catégories d'abord
+                await loadCategories();
+                
+                // Remplir le formulaire avec les données du produit
+                const form = document.getElementById('add-product-form');
+                form.querySelector('[name="name"]').value = product.name;
+                
+                // Attendre que les catégories soient chargées
+                setTimeout(() => {
+                    const categorySelect = document.getElementById('category-select');
+                    categorySelect.value = product.category;
+                }, 100);
+                
+                form.querySelector('[name="description"]').value = product.description || '';
+                form.querySelector('[name="price"]').value = product.price;
+                form.querySelector('[name="originalPrice"]').value = product.original_price || '';
+                form.querySelector('[name="stock"]').value = product.stock;
+                form.querySelector('[name="brand"]').value = product.brand || '';
+                form.querySelector('[name="rating"]').value = product.rating || 0;
+                document.getElementById('image-url-input').value = product.image || '';
+                form.querySelector('[name="inStock"]').checked = product.in_stock;
+                
+                // Afficher l'aperçu de l'image et switch to URL tab if product has image
+                if (product.image) {
+                    switchImageTab('url');
+                    document.getElementById('preview-img').src = product.image;
+                    document.getElementById('preview-filename').textContent = 'Image existante';
+                    document.getElementById('image-preview').classList.remove('hidden');
+                }
+                
+                // Changer le titre du modal
+                document.querySelector('#add-product-modal h3').textContent = 'Modifier le produit';
+                
+                // Ajouter un attribut pour savoir qu'on modifie
+                form.dataset.editId = productId;
+                
+                showAddProductModal();
+            }
+        }
+
+        async function deleteProduct(productId) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce produit? Cette action est irréversible.')) {
+                const result = await apiRequest(`/api/products/${productId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (result !== null) {
+                    jerryTech.showNotification('Produit supprimé avec succès', 'success');
+                    await loadProductsData(); // Reload products
+                }
+            }
+        }
+
+        async function updateOrderStatus(orderId) {
+            const newStatus = prompt('Nouveau statut (pending, processing, completed, cancelled):');
+            if (newStatus && ['pending', 'processing', 'completed', 'cancelled'].includes(newStatus)) {
+                try {
+                    const result = await apiRequest(`/api/orders/${orderId}?status=${newStatus}`, {
+                        method: 'PUT'
+                    });
+                    
+                    if (result) {
+                        jerryTech.showNotification('Statut de la commande mis à jour', 'success');
+                        await loadOrdersData();
+                        if (currentSection === 'dashboard') {
+                            await loadDashboardData();
+                        }
+                    }
+                } catch (error) {
+                    jerryTech.showNotification('Erreur lors de la mise à jour', 'error');
+                }
+            }
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            jerryTech.showNotification('Déconnexion réussie', 'success');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

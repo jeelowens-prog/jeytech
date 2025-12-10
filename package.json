@@ -1,0 +1,20 @@
+{
+  "name": "okcomputer_ajout-page-admin",
+  "version": "1.0.0",
+  "description": "Site e-commerce moderne avec backend Python (FastAPI) et frontend statique.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "npx tailwindcss -i ./src/input.css -o ./resources/css/styles.css",
+    "watch:css": "npx tailwindcss -i ./src/input.css -o ./resources/css/styles.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.18"
+  },
+  "dependencies": {
+    "feather-icons": "^4.29.2"
+  }
+}

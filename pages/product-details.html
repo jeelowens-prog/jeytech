@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails du produit - JerryTech</title>
+    <meta name="description" content="Détails du produit chez JerryTech - Delmas 33, Haïti">
+    
+    <!-- TailwindCSS -->
+    <link href="../resources/css/styles.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="../resources/js/feather.js"></script>
+    
+    <style>
+        body{font-family:'Inter',sans-serif;padding-bottom:80px}
+        .font-display{font-family:'Poppins',sans-serif}
+        .thumbnail-active{border-color:#1a73e8}
+        .quantity-btn{transition:all 0.2s ease}
+        .quantity-btn:hover{transform:scale(1.1)}
+        .bottom-navbar{position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(26,115,232,0.1);box-shadow:0 -4px 20px rgba(0,0,0,0.08)}
+        .bottom-navbar-item{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0.75rem 0.5rem;color:#6b7280;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);position:relative;text-decoration:none}
+        .bottom-navbar-item:active{transform:scale(0.95)}
+        .bottom-navbar-item.active{color:#1a73e8}
+        .bottom-navbar-item.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:40px;height:3px;background:linear-gradient(90deg,#1a73e8,#0d47a1);border-radius:0 0 3px 3px;animation:slideDown 0.3s ease}
+        @keyframes slideDown{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+        .bottom-navbar-icon{width:24px;height:24px;margin-bottom:0.25rem;transition:all 0.3s ease}
+        .bottom-navbar-item.active .bottom-navbar-icon{transform:translateY(-2px);filter:drop-shadow(0 2px 4px rgba(26,115,232,0.3))}
+        .bottom-navbar-label{font-size:0.7rem;font-weight:500;transition:all 0.3s ease}
+        .bottom-navbar-item.active .bottom-navbar-label{font-weight:600}
+        .bottom-navbar-badge{position:absolute;top:0.5rem;right:50%;transform:translateX(12px);background:linear-gradient(135deg,#ef4444,#dc2626);color:white;font-size:0.65rem;font-weight:600;padding:0.125rem 0.375rem;border-radius:10px;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(239,68,68,0.4);animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:1;transform:translateX(12px) scale(1)}50%{opacity:0.8;transform:translateX(12px) scale(1.05)}}
+        @media (min-width:768px){body{padding-bottom:0}.bottom-navbar{display:none}}
+        
+        /* Lightbox Styles */
+        .lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:9999;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all 0.3s ease}
+        .lightbox.active{opacity:1;visibility:visible}
+        .lightbox-image{max-width:90vw;max-height:85vh;object-fit:contain;transition:transform 0.3s ease}
+        .lightbox-close{position:absolute;top:1rem;right:1rem;color:white;font-size:2rem;cursor:pointer;background:rgba(255,255,255,0.1);border:none;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease}
+        .lightbox-close:hover{background:rgba(255,255,255,0.2);transform:scale(1.1)}
+        .lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);color:white;font-size:2rem;cursor:pointer;background:rgba(255,255,255,0.1);border:none;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease}
+        .lightbox-nav:hover{background:rgba(255,255,255,0.25)}
+        .lightbox-nav.prev{left:1rem}
+        .lightbox-nav.next{right:1rem}
+        .lightbox-counter{position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);color:white;font-size:0.875rem;background:rgba(0,0,0,0.5);padding:0.5rem 1rem;border-radius:9999px}
+        .lightbox-thumbnails{position:absolute;bottom:4rem;left:50%;transform:translateX(-50%);display:flex;gap:0.5rem}
+        .lightbox-thumb{width:60px;height:60px;object-fit:cover;border-radius:0.5rem;border:2px solid transparent;cursor:pointer;opacity:0.6;transition:all 0.2s ease}
+        .lightbox-thumb.active{border-color:white;opacity:1}
+        .lightbox-thumb:hover{opacity:1}
+        
+        /* Carousel Styles */
+        .carousel-container{position:relative}
+        .carousel-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.9);border:none;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.15);transition:all 0.2s ease;z-index:10}
+        .carousel-nav:hover{background:white;box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+        .carousel-nav.prev{left:0.5rem}
+        .carousel-nav.next{right:0.5rem}
+        .carousel-nav svg{width:20px;height:20px}
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="../index.html" class="flex items-center space-x-2">
+                        <img src="../resources/logo.jpg" alt="JeyTech" class="h-8 w-auto">
+                        <span class="font-display font-bold text-xl text-gray-900">JerryTech</span>
+                    </a>
+                </div>
+
+                <!-- Navigation Desktop -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="../index.html" class="text-gray-700 hover:text-blue-600 transition-colors">Accueil</a>
+                    <a href="products.html" class="text-gray-700 hover:text-blue-600 transition-colors">Produits</a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-600 transition-colors">À propos</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-blue-600 transition-colors">Contact</a>
+                </nav>
+
+                <!-- Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- Search -->
+                    <form class="search-form hidden lg:block">
+                        <div class="relative">
+                            <input type="text" placeholder="Rechercher..." class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <i data-feather="search" class="absolute left-3 top-2.5 h-5 w-5 text-gray-400"></i>
+                        </div>
+                    </form>
+
+                    <!-- Cart -->
+                    <a href="cart.html" class="relative cart-icon p-2 text-gray-700 hover:text-blue-600 transition-colors">
+                        <i data-feather="shopping-cart" class="h-6 w-6"></i>
+                        <span class="cart-count absolute -top-1 -right-1 bg-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center" style="display: none;">0</span>
+                    </a>
+
+                    <!-- Auth -->
+                    <div class="auth-buttons">
+                        <a href="account.html" class="login-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                            Connexion
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <nav class="flex" aria-label="Breadcrumb">
+                <ol class="flex items-center space-x-2">
+                    <li>
+                        <a href="index.html" class="text-gray-500 hover:text-gray-700">
+                            <i data-feather="home" class="h-4 w-4"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i data-feather="chevron-right" class="h-4 w-4 text-gray-400"></i>
+                            <a href="products.html" class="ml-2 text-gray-500 hover:text-gray-700">Produits</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i data-feather="chevron-right" class="h-4 w-4 text-gray-400"></i>
+                            <span id="breadcrumb-product" class="ml-2 text-gray-900 font-medium">Produit</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Product Details -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div id="product-content">
+            <!-- Loading State -->
+            <div id="loading" class="text-center py-12">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p class="mt-2 text-gray-600">Chargement du produit...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="error" class="text-center py-12 hidden">
+                <i data-feather="alert-circle" class="h-16 w-16 text-red-400 mx-auto mb-4"></i>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">Produit non trouvé</h3>
+                <p class="text-gray-600 mb-4">Le produit que vous recherchez n'existe pas ou n'est plus disponible.</p>
+                <a href="products.html" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    Voir tous les produits
+                </a>
+            </div>
+
+            <!-- Product Content -->
+            <div id="product-details" class="hidden">
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <!-- Product Images -->
+                    <div>
+                        <div class="bg-white rounded-lg shadow-sm p-4">
+                            <!-- Main Image with Carousel Controls -->
+                            <div class="carousel-container aspect-square bg-gray-100 rounded-lg mb-4 overflow-hidden">
+                                <img id="main-image" src="" alt="" class="w-full h-full object-cover cursor-zoom-in" onclick="openLightbox()">
+                                
+                                <!-- Carousel Navigation -->
+                                <button onclick="prevImage()" class="carousel-nav prev" title="Image précédente">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                </button>
+                                <button onclick="nextImage()" class="carousel-nav next" title="Image suivante">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </button>
+                            </div>
+                            
+                            <!-- Thumbnails -->
+                            <div class="grid grid-cols-4 gap-2" id="thumbnails">
+                                <!-- Thumbnails will be generated here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Info -->
+                    <div>
+                        <div class="bg-white rounded-lg shadow-sm p-6">
+                            <div class="mb-4">
+                                <nav class="text-sm text-gray-500 mb-2">
+                                    <a href="products.html?category=smartphones" id="category-link" class="hover:text-blue-600"></a>
+                                </nav>
+                                <h1 id="product-title" class="font-display text-3xl font-bold text-gray-900 mb-2"></h1>
+                                <div class="flex items-center space-x-4 mb-4">
+                                    <div class="flex text-yellow-400" id="product-rating">
+                                        <!-- Rating stars will be generated here -->
+                                    </div>
+                                    <span id="review-count" class="text-sm text-gray-500">(0 avis)</span>
+                                </div>
+                            </div>
+
+                            <!-- Price -->
+                            <div class="mb-6">
+                                <div class="flex items-center space-x-3 mb-2">
+                                    <span id="current-price" class="text-3xl font-bold text-gray-900"></span>
+                                    <span id="original-price" class="text-xl text-gray-500 line-through"></span>
+                                    <span id="discount-badge" class="bg-red-100 text-red-800 text-sm font-medium px-2 py-1 rounded hidden"></span>
+                                </div>
+                                <div class="text-sm text-gray-600">
+                                    <span id="stock-status" class="text-green-600 font-medium">En stock</span>
+                                    <span class="mx-2">•</span>
+                                    <span>Livraison gratuite à Delmas 33</span>
+                                </div>
+                            </div>
+
+                            <!-- Variants -->
+                            <div id="variants-section" class="mb-6 hidden">
+                                <h3 class="font-medium text-gray-900 mb-3">Options disponibles</h3>
+                                <div id="variants" class="space-y-3">
+                                    <!-- Variants will be generated here -->
+                                </div>
+                            </div>
+
+                            <!-- Quantity -->
+                            <div class="mb-6">
+                                <h3 class="font-medium text-gray-900 mb-3">Quantité</h3>
+                                <div class="flex items-center space-x-3">
+                                    <button onclick="changeQuantity(-1)" class="quantity-btn w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-gray-50">
+                                        <i data-feather="minus" class="h-4 w-4"></i>
+                                    </button>
+                                    <input type="number" id="quantity" value="1" min="1" max="10" class="w-16 text-center border border-gray-300 rounded-lg py-2">
+                                    <button onclick="changeQuantity(1)" class="quantity-btn w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-gray-50">
+                                        <i data-feather="plus" class="h-4 w-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Add to Cart -->
+                            <div class="flex space-x-4 mb-6">
+                                <button id="add-to-cart-btn" class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                                    <i data-feather="shopping-cart" class="h-5 w-5 inline mr-2"></i>
+                                    Ajouter au panier
+                                </button>
+                                <button class="p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <i data-feather="heart" class="h-5 w-5 text-gray-600"></i>
+                                </button>
+                            </div>
+
+                            <!-- Product Info -->
+                            <div class="border-t pt-6">
+                                <h3 class="font-medium text-gray-900 mb-3">Description</h3>
+                                <div id="product-description" class="text-gray-600 space-y-3">
+                                    <!-- Description will be loaded here -->
+                                </div>
+                            </div>
+
+                            <!-- Specifications -->
+                            <div class="border-t pt-6">
+                                <h3 class="font-medium text-gray-900 mb-3">Spécifications</h3>
+                                <div id="product-specs" class="space-y-2">
+                                    <!-- Specifications will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-display text-3xl font-bold text-gray-900 mb-4">Produits similaires</h2>
+                <p class="text-lg text-gray-600">Découvrez d'autres produits qui pourraient vous intéresser</p>
+            </div>
+
+            <div id="related-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Related products will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Overlay -->
+    <div id="lightbox" class="lightbox" onclick="closeLightboxOnBackdrop(event)">
+        <button class="lightbox-close" onclick="closeLightbox()" title="Fermer (ESC)">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        
+        <button class="lightbox-nav prev" onclick="lightboxPrev()" title="Précédent (←)">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="28" height="28"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
+        
+        <img id="lightbox-image" class="lightbox-image" src="" alt="">
+        
+        <button class="lightbox-nav next" onclick="lightboxNext()" title="Suivant (→)">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="28" height="28"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        </button>
+        
+        <div id="lightbox-thumbnails" class="lightbox-thumbnails">
+            <!-- Thumbnails will be generated here -->
+        </div>
+        
+        <div id="lightbox-counter" class="lightbox-counter">1 / 1</div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="../resources/logo.png" alt="JerryTech" class="h-8 w-auto filter brightness-0 invert">
+                        <span class="font-display font-bold text-xl">JerryTech</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">Votre boutique technologique de confiance à Delmas 33, Haïti.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i data-feather="facebook" class="h-5 w-5"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i data-feather="twitter" class="h-5 w-5"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i data-feather="instagram" class="h-5 w-5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-semibold mb-4">Produits</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="products.html?category=smartphones" class="hover:text-white transition-colors">Smartphones</a></li>
+                        <li><a href="products.html?category=ordinateurs" class="hover:text-white transition-colors">Ordinateurs</a></li>
+                        <li><a href="products.html?category=audio" class="hover:text-white transition-colors">Audio</a></li>
+                        <li><a href="products.html?category=accessoires" class="hover:text-white transition-colors">Accessoires</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-semibold mb-4">Service client</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="contact.html" class="hover:text-white transition-colors">Contactez-nous</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Support technique</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Garantie</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Retours</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-semibold mb-4">Informations</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="about.html" class="hover:text-white transition-colors">À propos</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Conditions d'utilisation</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Politique de confidentialité</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 JerryTech. Tous droits réservés. Delmas 33, Haïti.</p>
+            </div>
+        </div>
+    </footer>
+
+    <nav class="bottom-navbar md:hidden"><div class="flex items-center justify-around max-w-md mx-auto"><a href="../index.html" class="bottom-navbar-item"><i data-feather="home" class="bottom-navbar-icon"></i><span class="bottom-navbar-label">Accueil</span></a><a href="products.html" class="bottom-navbar-item active"><i data-feather="grid" class="bottom-navbar-icon"></i><span class="bottom-navbar-label">Produits</span></a><a href="cart.html" class="bottom-navbar-item"><i data-feather="shopping-cart" class="bottom-navbar-icon"></i><span class="bottom-navbar-label">Panier</span><span class="cart-count bottom-navbar-badge" style="display:none;">0</span></a><a href="about.html" class="bottom-navbar-item"><i data-feather="info" class="bottom-navbar-icon"></i><span class="bottom-navbar-label">À propos</span></a><a href="account.html" class="bottom-navbar-item"><i data-feather="user" class="bottom-navbar-icon"></i><span class="bottom-navbar-label">Compte</span></a></div></nav>
+
+    <!-- Scripts -->
+    <script src="../main.js"></script>
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+
+        let currentProduct = null;
+        let currentQuantity = 1;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+
+            if (!productId) {
+                showError();
+                return;
+            }
+
+            await loadProduct(productId);
+        });
+
+        async function loadProduct(productId) {
+            try {
+                document.getElementById('loading').classList.remove('hidden');
+                
+                currentProduct = await jerryTech.getProduct(productId);
+                
+                if (!currentProduct) {
+                    showError();
+                    return;
+                }
+
+                renderProduct();
+                loadRelatedProducts();
+                
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('product-details').classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('Error loading product:', error);
+                showError();
+            }
+        }
+
+        function showError() {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('error').classList.remove('hidden');
+            feather.replace();
+        }
+
+        function renderProduct() {
+            if (!currentProduct) return;
+
+            // Update breadcrumb
+            document.getElementById('breadcrumb-product').textContent = currentProduct.name;
+            
+            // Update category link
+            const categoryLink = document.getElementById('category-link');
+            categoryLink.textContent = currentProduct.category;
+            categoryLink.href = `products.html?category=${currentProduct.category.toLowerCase()}`;
+
+            // Update product info
+            document.getElementById('product-title').textContent = currentProduct.name;
+            document.getElementById('current-price').textContent = jerryTech.formatPrice(currentProduct.price);
+            
+            if (currentProduct.originalPrice) {
+                document.getElementById('original-price').textContent = jerryTech.formatPrice(currentProduct.originalPrice);
+                const discount = Math.round(((currentProduct.originalPrice - currentProduct.price) / currentProduct.originalPrice) * 100);
+                document.getElementById('discount-badge').textContent = `-${discount}%`;
+                document.getElementById('discount-badge').classList.remove('hidden');
+            }
+
+            // Update stock status
+            const stockStatus = document.getElementById('stock-status');
+            if (currentProduct.inStock) {
+                stockStatus.textContent = 'En stock';
+                stockStatus.className = 'text-green-600 font-medium';
+            } else {
+                stockStatus.textContent = 'Rupture de stock';
+                stockStatus.className = 'text-red-600 font-medium';
+                document.getElementById('add-to-cart-btn').disabled = true;
+                document.getElementById('add-to-cart-btn').textContent = 'Rupture de stock';
+            }
+
+            // Update rating
+            const ratingContainer = document.getElementById('product-rating');
+            ratingContainer.innerHTML = Array.from({length: 5}, (_, i) => 
+                `<i data-feather="star" class="h-5 w-5 ${i < Math.floor(currentProduct.rating || 0) ? 'fill-current text-yellow-400' : 'text-gray-300'}"></i>`
+            ).join('');
+
+            document.getElementById('review-count').textContent = `(${currentProduct.rating || '0'} avis)`;
+
+            // Update description
+            document.getElementById('product-description').innerHTML = `
+                <p>${currentProduct.description}</p>
+                <p>Profitez de la qualité supérieure et des fonctionnalités avancées de ce produit. Parfait pour vos besoins quotidiens avec une garantie complète incluse.</p>
+            `;
+
+            // Update specifications
+            document.getElementById('product-specs').innerHTML = `
+                <div class="flex justify-between py-2 border-b">
+                    <span class="text-gray-600">Marque</span>
+                    <span class="font-medium">${currentProduct.brand || 'JerryTech'}</span>
+                </div>
+                <div class="flex justify-between py-2 border-b">
+                    <span class="text-gray-600">Catégorie</span>
+                    <span class="font-medium">${currentProduct.category}</span>
+                </div>
+                <div class="flex justify-between py-2 border-b">
+                    <span class="text-gray-600">Référence</span>
+                    <span class="font-medium">#${currentProduct.id.toString().padStart(6, '0')}</span>
+                </div>
+                <div class="flex justify-between py-2">
+                    <span class="text-gray-600">Garantie</span>
+                    <span class="font-medium text-green-600">1 an incluse</span>
+                </div>
+            `;
+
+            // Update images
+            updateProductImages();
+
+            // Setup add to cart button
+            document.getElementById('add-to-cart-btn').addEventListener('click', addToCart);
+
+            feather.replace();
+        }
+
+        // Image gallery state
+        let productImages = [];
+        let currentImageIndex = 0;
+
+        function updateProductImages() {
+            console.log('Product data:', currentProduct);
+            console.log('Product images (raw):', currentProduct.images);
+            
+            // Build images array from product data
+            productImages = [currentProduct.image];
+            
+            // Add additional images if they exist (from JSON)
+            if (currentProduct.images) {
+                try {
+                    let additionalImages = currentProduct.images;
+                    
+                    // Handle double stringified JSON or just string
+                    if (typeof additionalImages === 'string') {
+                        try {
+                            additionalImages = JSON.parse(additionalImages);
+                        } catch (e) {
+                            console.error('First parse failed:', e);
+                        }
+                    }
+                    
+                    // Sometimes it might be double encoded
+                    if (typeof additionalImages === 'string') {
+                        try {
+                            additionalImages = JSON.parse(additionalImages);
+                        } catch (e) {
+                            console.error('Second parse failed:', e);
+                        }
+                    }
+                    
+                    console.log('Parsed additional images:', additionalImages);
+                    
+                    if (Array.isArray(additionalImages)) {
+                        productImages = [...productImages, ...additionalImages];
+                    }
+                } catch (e) {
+                    console.error('Error parsing images:', e);
+                }
+            }
+            
+            console.log('Final productImages array:', productImages);
+            
+            // Remove duplicates
+            productImages = [...new Set(productImages)];
+            
+            // alert('Images raw: ' + JSON.stringify(currentProduct.images) + '\nLoaded: ' + productImages.length); // Debug
+            
+            // Set main image
+            currentImageIndex = 0;
+            updateMainImage();
+            
+            // Generate thumbnails
+            const thumbnailsContainer = document.getElementById('thumbnails');
+            thumbnailsContainer.innerHTML = productImages.map((img, index) => `
+                <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden cursor-pointer border-2 ${index === 0 ? 'border-blue-600' : 'border-transparent'}" 
+                     onclick="selectImage(${index})" data-index="${index}">
+                    <img src="${img}" alt="${currentProduct.name} ${index + 1}" class="w-full h-full object-cover">
+                </div>
+            `).join('');
+            
+            // Hide carousel nav if only one image
+            if (productImages.length <= 1) {
+                document.querySelectorAll('.carousel-nav').forEach(el => el.style.display = 'none');
+            }
+        }
+
+        function updateMainImage() {
+            const mainImage = document.getElementById('main-image');
+            mainImage.src = productImages[currentImageIndex];
+            mainImage.alt = currentProduct.name;
+            
+            // Update thumbnails active state
+            document.querySelectorAll('#thumbnails > div').forEach((thumb, index) => {
+                thumb.classList.toggle('border-blue-600', index === currentImageIndex);
+                thumb.classList.toggle('border-transparent', index !== currentImageIndex);
+            });
+        }
+
+        function selectImage(index) {
+            currentImageIndex = index;
+            updateMainImage();
+        }
+
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
+            updateMainImage();
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % productImages.length;
+            updateMainImage();
+        }
+
+        // ===== LIGHTBOX FUNCTIONS =====
+        
+        function openLightbox() {
+            // alert('Opening lightbox! Images: ' + productImages.length); // Debug
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-image');
+            
+            if (!lightbox || !lightboxImg) {
+                console.error('Lightbox elements not found');
+                return;
+            }
+            
+            if (!productImages[currentImageIndex]) {
+                console.error('No image at index ' + currentImageIndex);
+                return;
+            }
+            
+            lightboxImg.src = productImages[currentImageIndex];
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            updateLightboxThumbnails();
+            updateLightboxCounter();
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeLightboxOnBackdrop(event) {
+            if (event.target.id === 'lightbox') {
+                closeLightbox();
+            }
+        }
+
+        function lightboxPrev() {
+            currentImageIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
+            updateLightboxImage();
+            updateMainImage();
+        }
+
+        function lightboxNext() {
+            currentImageIndex = (currentImageIndex + 1) % productImages.length;
+            updateLightboxImage();
+            updateMainImage();
+        }
+
+        function updateLightboxImage() {
+            document.getElementById('lightbox-image').src = productImages[currentImageIndex];
+            updateLightboxCounter();
+            updateLightboxThumbnails();
+        }
+
+        function updateLightboxCounter() {
+            document.getElementById('lightbox-counter').textContent = `${currentImageIndex + 1} / ${productImages.length}`;
+        }
+
+        function updateLightboxThumbnails() {
+            const container = document.getElementById('lightbox-thumbnails');
+            container.innerHTML = productImages.map((img, index) => `
+                <img src="${img}" alt="" class="lightbox-thumb ${index === currentImageIndex ? 'active' : ''}" 
+                     onclick="selectLightboxImage(${index})">
+            `).join('');
+        }
+
+        function selectLightboxImage(index) {
+            currentImageIndex = index;
+            updateLightboxImage();
+            updateMainImage();
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const lightbox = document.getElementById('lightbox');
+            if (!lightbox.classList.contains('active')) return;
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    lightboxPrev();
+                    break;
+                case 'ArrowRight':
+                    lightboxNext();
+                    break;
+                case 'Escape':
+                    closeLightbox();
+                    break;
+            }
+        });
+
+        // Touch/swipe support for lightbox
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.getElementById('lightbox')?.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.getElementById('lightbox')?.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const threshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0) {
+                    lightboxNext();
+                } else {
+                    lightboxPrev();
+                }
+            }
+        }
+
+        function changeMainImage(imageSrc, thumbnailElement) {
+            const index = productImages.indexOf(imageSrc);
+            if (index !== -1) {
+                selectImage(index);
+            }
+        }
+
+        function changeQuantity(delta) {
+            const quantityInput = document.getElementById('quantity');
+            let newQuantity = parseInt(quantityInput.value) + delta;
+            
+            if (newQuantity < 1) newQuantity = 1;
+            if (newQuantity > 10) newQuantity = 10;
+            
+            quantityInput.value = newQuantity;
+            currentQuantity = newQuantity;
+        }
+
+        function addToCart() {
+            if (!currentProduct || !currentProduct.inStock) return;
+            
+            jerryTech.addToCart(currentProduct, currentQuantity);
+        }
+
+        async function loadRelatedProducts() {
+            try {
+                const relatedProducts = await jerryTech.getProducts({ 
+                    category: currentProduct.category.toLowerCase(), 
+                    limit: 4 
+                });
+                
+                // Filter out current product
+                const filteredProducts = relatedProducts.filter(p => p.id !== currentProduct.id);
+                
+                const container = document.getElementById('related-products');
+                container.innerHTML = filteredProducts.map(product => `
+                    <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow overflow-hidden">
+                        <div class="aspect-square bg-gray-100 relative overflow-hidden">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">
+                            ${product.originalPrice ? '<div class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-semibold">Promo</div>' : ''}
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-sm mb-2 line-clamp-2">
+                                <a href="product-details.html?id=${product.id}" class="hover:text-blue-600 transition-colors">${product.name}</a>
+                            </h3>
+                            <div class="flex items-center mb-2">
+                                <div class="flex text-yellow-400">
+                                    ${Array.from({length: 5}, (_, i) => 
+                                        `<i data-feather="star" class="h-3 w-3 ${i < Math.floor(product.rating || 0) ? 'fill-current' : ''}"></i>`
+                                    ).join('')}
+                                </div>
+                                <span class="text-xs text-gray-500 ml-1">(${product.rating || '0'})</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-lg font-bold text-gray-900">${jerryTech.formatPrice(product.price)}</span>
+                                </div>
+                                <button onclick="addToCartFromRelated(${product.id})" class="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700 transition-colors">
+                                    <i data-feather="shopping-cart" class="h-3 w-3"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                feather.replace();
+            } catch (error) {
+                console.error('Error loading related products:', error);
+            }
+        }
+
+        function addToCartFromRelated(productId) {
+            const product = jerryTech.getMockProduct(productId);
+            if (product) {
+                jerryTech.addToCart(product);
+            }
+        }
+
+        // Quantity input change
+        document.getElementById('quantity').addEventListener('change', (e) => {
+            currentQuantity = parseInt(e.target.value) || 1;
+        });
+    </script>
+</body>
+</html>
