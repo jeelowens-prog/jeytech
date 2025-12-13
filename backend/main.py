@@ -22,8 +22,8 @@ from schemas import (
 from auth import verify_token, create_access_token, get_password_hash, verify_password
 from cloudinary_config import upload_image, delete_image, extract_public_id_from_url
 
-# Créer les tables
-Base.metadata.create_all(bind=engine)
+# Créer les tables (Désactivé pour utiliser Alembic migrations)
+# Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="JerryTech API",
