@@ -500,10 +500,8 @@
             if (hasErrors) return;
 
             const userData = {
-                firstname,
-                lastname,
+                name: `${firstname} ${lastname}`.trim(),
                 email,
-                phone,
                 password
             };
 

@@ -6,9 +6,11 @@ from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
 import bcrypt
+from dotenv import load_dotenv
+import os
 
 # Configuration JWT
-SECRET_KEY = "jerrytech-secret-key-change-in-production"  # À changer en production
+SECRET_KEY = os.getenv('SECRET_KEY')  # À changer en production
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30 * 24 * 60  # 30 jours
 
