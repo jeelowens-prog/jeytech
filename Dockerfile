@@ -25,8 +25,8 @@ COPY main.js ./
 # Installer les dépendances via Poetry
 RUN poetry install --no-root --no-interaction
 
-# Exécuter Alembic pour les migrations
-RUN alembic -c backend/alembic.ini upgrade head
+# Exécuter Alembic pour les migrations via Poetry
+RUN poetry run alembic -c backend/alembic.ini upgrade head
 
 # Exposer le port pour Render
 EXPOSE 8000
