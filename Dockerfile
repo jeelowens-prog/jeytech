@@ -17,7 +17,7 @@ RUN pip install --no-cache-dir "poetry==1.7.6"
 # Copier les fichiers nécessaires
 COPY pyproject.toml poetry.lock* ./
 COPY backend/ ./backend
-COPY alembic.ini ./backend/alembic.ini
+COPY backend/alembic.ini ./backend/alembic.ini
 COPY resources/ ./resources
 COPY *.html ./
 COPY main.js ./
