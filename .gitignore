@@ -4,3 +4,7 @@ update_navbar.ps1
 .quodo
 /virtual
 /backend
+.env
+venv/
+__pycache__/
+*.pyc
