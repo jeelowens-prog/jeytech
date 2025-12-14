@@ -5,7 +5,7 @@ class JerryTech {
     constructor() {
         // Utiliser l'API locale en développement, ou l'URL de production
         this.apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? 'http://localhost:8000'
+            ? 'http://localhost:5000'
             : 'https://jeytech.onrender.com';
         this.cart = this.loadCart();
         this.token = localStorage.getItem('authToken');
@@ -32,6 +32,7 @@ class JerryTech {
                 this.token = data.token;
                 localStorage.setItem('authToken', this.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
+                this.checkAuthStatus(); // Mettre à jour l'UI immédiatement
                 this.showNotification('Connexion réussie!', 'success');
                 return true;
             } else {
@@ -54,10 +55,17 @@ class JerryTech {
             });
 
             if (response.ok) {
+                const data = await response.json();
+                // Stocker le token et les infos utilisateur (comme login)
+                this.token = data.token;
+                localStorage.setItem('authToken', this.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                this.checkAuthStatus(); // Mettre à jour l'UI immédiatement
                 this.showNotification('Compte créé avec succès!', 'success');
-                return true;
+                return data; // Retourner les données pour pouvoir les utiliser
             } else {
-                this.showNotification('Erreur lors de la création du compte', 'error');
+                const errorData = await response.json().catch(() => ({}));
+                this.showNotification(errorData.error || 'Erreur lors de la création du compte', 'error');
                 return false;
             }
         } catch (error) {
@@ -67,39 +75,54 @@ class JerryTech {
         }
     }
 
+
     logout() {
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');
         this.token = null;
         this.showNotification('Déconnexion réussie', 'success');
-        setTimeout(() => window.location.href = 'index.html', 1000);
+        // Détecter si on est dans un sous-dossier et ajuster le chemin
+        const isInSubfolder = window.location.pathname.includes('/pages/');
+        const indexPath = isInSubfolder ? '../index.html' : 'index.html';
+        setTimeout(() => window.location.href = indexPath, 1000);
     }
 
     checkAuthStatus() {
-        const user = localStorage.getItem('user');
-        const adminToken = localStorage.getItem('adminToken');
+        const userStr = localStorage.getItem('user');
 
-        if (adminToken) {
-            // User is admin, show admin link
-            this.showAdminLink();
-        }
-
-        if (user && this.token) {
-            const userData = JSON.parse(user);
+        if (userStr && this.token) {
+            const userData = JSON.parse(userStr);
             this.updateAuthUI(userData);
+
+            // Vérifier si l'utilisateur est admin
+            if (userData.is_admin) {
+                this.showAdminLink();
+            }
         }
     }
 
     showAdminLink() {
+        // Déterminer le chemin correct vers admin.html
+        const isInSubfolder = window.location.pathname.includes('/pages/');
+        const adminPath = isInSubfolder ? 'admin.html' : 'pages/admin.html';
+
         // Add admin link to navigation if not already present
         const navs = document.querySelectorAll('nav');
         navs.forEach(nav => {
+            // Éviter les doublons
             if (!nav.querySelector('.admin-link')) {
                 const adminLink = document.createElement('a');
-                adminLink.href = 'admin.html';
-                adminLink.textContent = 'Admin';
-                adminLink.className = 'admin-link text-gray-700 hover:text-blue-600 transition-colors';
+                adminLink.href = adminPath;
+                adminLink.innerHTML = '<i data-feather="shield" class="h-4 w-4 inline mr-1"></i> Admin';
+
+                // Style différent pour desktop vs mobile si nécessaire, mais ici on garde simple
+                adminLink.className = 'admin-link text-red-600 font-semibold hover:text-red-700 transition-colors flex items-center bg-red-50 px-3 py-1 rounded-full cursor-pointer';
+
+                // Ajouter au début ou à la fin de la nav
                 nav.appendChild(adminLink);
+
+                // Rafraichir les icônes feather si chargé
+                if (window.feather) feather.replace();
             }
         });
     }
@@ -108,12 +131,21 @@ class JerryTech {
         const authButtons = document.querySelectorAll('.auth-buttons');
         authButtons.forEach(button => {
             if (button.querySelector('.login-btn')) {
+                // Determine path to account page based on current location
+                const isInSubfolder = window.location.pathname.includes('/pages/');
+                const accountPath = isInSubfolder ? 'account.html' : 'pages/account.html';
+
                 button.innerHTML = `
-                    <div class="flex items-center space-x-2">
-                        <span class="text-sm text-gray-600">Bonjour, ${userData.name}</span>
-                        <button onclick="jerryTech.logout()" class="text-blue-600 hover:text-blue-800 text-sm">Déconnexion</button>
+                    <div class="flex items-center space-x-3">
+                        <a href="${accountPath}" class="text-sm font-medium text-gray-700 hover:text-blue-600 flex items-center transition-colors">
+                            <i data-feather="user" class="h-4 w-4 mr-1"></i>
+                            ${userData.name}
+                        </a>
+                        <button onclick="jerryTech.logout()" class="text-red-500 hover:text-red-700 text-sm font-medium transition-colors">Déconnexion</button>
                     </div>
                 `;
+                // Refresh icons
+                if (window.feather) feather.replace();
             }
         });
     }

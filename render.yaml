@@ -1,6 +1,0 @@
-services:
-  - type: web
-    name: jeytech-api
-    env: docker
-    plan: free
-    autoDeploy: true

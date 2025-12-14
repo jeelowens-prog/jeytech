@@ -81,16 +81,18 @@
     </header>
 
     <!-- Main Content -->
-    <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <!-- Welcome Message -->
-        <div class="text-center mb-8">
-            <img src="../resources/logo.png" alt="JerryTech" class="h-12 w-auto mx-auto mb-4">
-            <h1 class="font-display text-3xl font-bold text-gray-900 mb-2">Bienvenue chez JerryTech</h1>
-            <p class="text-gray-600">Connectez-vous ou créez votre compte</p>
-        </div>
+    <div id="auth-container" class="max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Auth Forms Wrapper (will be hidden when dashboard is shown) -->
+        <div id="auth-forms-wrapper">
+            <!-- Welcome Message -->
+            <div class="text-center mb-8">
+                <img src="../resources/logo.png" alt="JerryTech" class="h-12 w-auto mx-auto mb-4">
+                <h1 class="font-display text-3xl font-bold text-gray-900 mb-2">Bienvenue chez JerryTech</h1>
+                <p class="text-gray-600">Connectez-vous ou créez votre compte</p>
+            </div>
 
-        <!-- Auth Container -->
-        <div class="bg-white rounded-lg shadow-sm p-8">
+            <!-- Auth Container -->
+            <div class="bg-white rounded-lg shadow-sm p-8">
             <!-- Tabs -->
             <div class="flex mb-8">
                 <button id="login-tab" onclick="switchTab('login')" class="flex-1 py-3 text-center font-medium rounded-lg transition-colors tab-active">
@@ -201,6 +203,7 @@
                 </button>
             </div>
         </div>
+        </div> <!-- End auth-forms-wrapper -->
 
         <!-- Account Dashboard (Hidden by default) -->
         <div id="account-dashboard" class="hidden">
@@ -213,46 +216,124 @@
                     <p class="text-gray-600">Gérez vos informations et commandes</p>
                 </div>
 
-                <!-- User Info -->
-                <div class="bg-gray-50 rounded-lg p-6 mb-6">
-                    <h3 class="font-semibold text-lg mb-4">Informations personnelles</h3>
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Nom complet</label>
-                            <p id="user-fullname" class="text-gray-900">-</p>
+                <!-- Navigation Tabs -->
+                <div class="flex border-b border-gray-200 mb-6 overflow-x-auto no-scrollbar">
+                    <button onclick="switchDashboardTab('overview')" id="tab-overview" class="dashboard-tab px-4 py-2 border-b-2 border-blue-600 text-blue-600 font-medium whitespace-nowrap transition-colors focus:outline-none">Vue d'ensemble</button>
+                    <button onclick="switchDashboardTab('orders')" id="tab-orders" class="dashboard-tab px-4 py-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium whitespace-nowrap transition-colors focus:outline-none">Mes commandes</button>
+                    <button onclick="switchDashboardTab('wishlist')" id="tab-wishlist" class="dashboard-tab px-4 py-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium whitespace-nowrap transition-colors focus:outline-none">Favoris</button>
+                    <button onclick="switchDashboardTab('settings')" id="tab-settings" class="dashboard-tab px-4 py-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium whitespace-nowrap transition-colors focus:outline-none">Paramètres</button>
+                </div>
+
+                <!-- Section: Overview -->
+                <div id="section-overview" class="dashboard-section space-y-6 animation-fade">
+                    <div class="bg-blue-50 border border-blue-100 rounded-lg p-6 mb-6">
+                        <div class="flex items-center">
+                            <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                <i data-feather="smile" class="text-blue-600 h-6 w-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-blue-900">Ravi de vous revoir !</h3>
+                                <p class="text-blue-700">Gérez vos commandes et vos préférences depuis votre tableau de bord.</p>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                            <p id="user-email" class="text-gray-900">-</p>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
-                            <p id="user-phone" class="text-gray-900">-</p>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Membre depuis</label>
-                            <p id="user-since" class="text-gray-900">-</p>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h3 class="font-semibold text-lg mb-4 flex items-center">
+                            <i data-feather="user" class="h-5 w-5 mr-2 text-gray-500"></i>
+                            Informations personnelles
+                        </h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-white p-4 rounded border border-gray-200">
+                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Nom complet</label>
+                                <p id="user-fullname" class="text-gray-900 font-medium text-lg">-</p>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-gray-200">
+                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Email</label>
+                                <p id="user-email" class="text-gray-900 font-medium text-lg">-</p>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-gray-200">
+                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Téléphone</label>
+                                <p id="user-phone" class="text-gray-900 font-medium text-lg">-</p>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-gray-200">
+                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Membre depuis</label>
+                                <p id="user-since" class="text-gray-900 font-medium text-lg">-</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
-                <div class="grid md:grid-cols-3 gap-4 mb-6">
-                    <a href="orders.html" class="bg-blue-50 p-4 rounded-lg hover:bg-blue-100 transition-colors">
-                        <i data-feather="package" class="h-8 w-8 text-blue-600 mb-2"></i>
-                        <h4 class="font-semibold text-blue-900">Mes commandes</h4>
-                        <p class="text-sm text-blue-700">Voir l'historique</p>
-                    </a>
-                    <a href="wishlist.html" class="bg-red-50 p-4 rounded-lg hover:bg-red-100 transition-colors">
-                        <i data-feather="heart" class="h-8 w-8 text-red-600 mb-2"></i>
-                        <h4 class="font-semibold text-red-900">Favoris</h4>
-                        <p class="text-sm text-red-700">Mes produits préférés</p>
-                    </a>
-                    <a href="settings.html" class="bg-green-50 p-4 rounded-lg hover:bg-green-100 transition-colors">
-                        <i data-feather="settings" class="h-8 w-8 text-green-600 mb-2"></i>
-                        <h4 class="font-semibold text-green-900">Paramètres</h4>
-                        <p class="text-sm text-green-700">Modifier mes infos</p>
-                    </a>
+                <!-- Section: Orders -->
+                <div id="section-orders" class="dashboard-section hidden space-y-6 animation-fade">
+                    <div class="flex justify-between items-center mb-4">
+                         <h3 class="font-semibold text-lg flex items-center">
+                            <i data-feather="package" class="h-5 w-5 mr-2 text-gray-500"></i>
+                            Historique des commandes
+                         </h3>
+                         <button onclick="loadUserOrders()" class="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center">
+                            <i data-feather="refresh-cw" class="h-3 w-3 mr-1"></i> Rafraîchir
+                         </button>
+                    </div>
+                    <div id="orders-container" class="space-y-4 min-h-[200px]">
+                        <div class="text-center py-12 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                            <i data-feather="loader" class="h-8 w-8 mx-auto text-blue-500 animate-spin mb-3"></i>
+                            <p class="text-gray-500">Chargement de vos commandes...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section: Wishlist -->
+                <div id="section-wishlist" class="dashboard-section hidden space-y-6 animation-fade">
+                     <h3 class="font-semibold text-lg flex items-center mb-4">
+                        <i data-feather="heart" class="h-5 w-5 mr-2 text-gray-500"></i>
+                        Mes produits favoris
+                     </h3>
+                    <div id="wishlist-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                         <div class="col-span-full text-center py-12 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                             <div class="bg-white p-4 rounded-full inline-block mb-3 shadow-sm">
+                                <i data-feather="heart" class="h-8 w-8 text-gray-300"></i>
+                             </div>
+                             <h4 class="text-gray-900 font-medium mb-1">Votre liste est vide</h4>
+                             <p class="text-gray-500 mb-4">Vous n'avez pas encore ajouté de produits favoris.</p>
+                             <a href="products.html" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                Découvrir nos produits
+                             </a>
+                         </div>
+                    </div>
+                </div>
+
+                <!-- Section: Settings -->
+                <div id="section-settings" class="dashboard-section hidden space-y-6 animation-fade">
+                    <h3 class="font-semibold text-lg flex items-center mb-4">
+                        <i data-feather="settings" class="h-5 w-5 mr-2 text-gray-500"></i>
+                        Modifier mes informations
+                     </h3>
+                    <form onsubmit="updateProfile(event)" class="space-y-6 max-w-xl bg-gray-50 p-6 rounded-lg border border-gray-200">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Prénom & Nom</label>
+                                <div class="relative">
+                                    <input type="text" id="edit-name" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="Votre nom complet">
+                                    <i data-feather="user" class="absolute left-3 top-2.5 h-4 w-4 text-gray-400"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
+                                <div class="relative">
+                                    <input type="tel" id="edit-phone" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="+509 ...">
+                                    <i data-feather="phone" class="absolute left-3 top-2.5 h-4 w-4 text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-4 border-t border-gray-200 flex justify-end">
+                            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center shadow-sm">
+                                <i data-feather="save" class="h-4 w-4 mr-2"></i>
+                                Enregistrer les modifications
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
                 <!-- Logout Button -->
@@ -272,7 +353,7 @@
             <div class="grid md:grid-cols-4 gap-8 mb-8">
                 <div>
                     <div class="flex items-center space-x-2 mb-4">
-                        <img src="../resources/logo.png" alt="JerryTech" class="h-8 w-auto filter brightness-0 invert">
+                        <img src="../resources/logo.png" alt="JerryTech" class="h-8 w-auto">
                         <span class="font-display font-bold text-xl">JerryTech</span>
                     </div>
                     <p class="text-gray-400 mb-4">Votre boutique technologique de confiance à Delmas 33, Haïti.</p>
@@ -506,15 +587,12 @@
             };
 
             try {
-                const success = await jerryTech.register(userData);
+                const result = await jerryTech.register(userData);
                 
-                if (success) {
-                    // Auto-login after registration
-                    setTimeout(() => {
-                        switchTab('login');
-                        document.getElementById('login-email').value = email;
-                        jerryTech.showNotification('Compte créé! Vous pouvez maintenant vous connecter.', 'success');
-                    }, 1500);
+                if (result) {
+                    // L'utilisateur est maintenant connecté automatiquement
+                    // Afficher le dashboard (pas de redirection vers admin car is_admin=false)
+                    showAccountDashboard(result.user);
                 }
             } catch (error) {
                 console.error('Registration error:', error);
@@ -524,11 +602,12 @@
 
         function showAccountDashboard(user) {
             // Hide auth forms and show dashboard
-            document.querySelector('.max-w-md').classList.add('hidden');
+            document.getElementById('auth-forms-wrapper').classList.add('hidden');
             document.getElementById('account-dashboard').classList.remove('hidden');
             
-            // Update user info
-            document.getElementById('user-fullname').textContent = `${user.firstname || ''} ${user.lastname || ''}`.trim() || 'Non spécifié';
+            // Update user info - supporter les deux formats (name ou firstname/lastname)
+            const fullName = user.name || `${user.firstname || ''} ${user.lastname || ''}`.trim();
+            document.getElementById('user-fullname').textContent = fullName || 'Non spécifié';
             document.getElementById('user-email').textContent = user.email || 'Non spécifié';
             document.getElementById('user-phone').textContent = user.phone || 'Non spécifié';
             document.getElementById('user-since').textContent = user.createdAt ? new Date(user.createdAt).toLocaleDateString('fr-FR') : 'Récemment';
@@ -540,7 +619,7 @@
             jerryTech.logout();
             
             // Show login form again
-            document.querySelector('.max-w-md').classList.remove('hidden');
+            document.getElementById('auth-forms-wrapper').classList.remove('hidden');
             document.getElementById('account-dashboard').classList.add('hidden');
             
             // Reset forms
@@ -580,11 +659,131 @@
             if (e.key === 'Enter') {
                 if (currentTab === 'login') {
                     login();
-                } else {
+                } else if (currentTab === 'register') {
                     register();
                 }
             }
         });
+
+        // ===== DASHBOARD FUNCTIONS =====
+
+        function switchDashboardTab(tabName) {
+            // Update Tab Styles
+            document.querySelectorAll('.dashboard-tab').forEach(tab => {
+                tab.classList.remove('border-blue-600', 'text-blue-600');
+                tab.classList.add('border-transparent', 'text-gray-500');
+            });
+            
+            const activeTab = document.getElementById('tab-' + tabName);
+            if(activeTab) {
+                activeTab.classList.remove('border-transparent', 'text-gray-500');
+                activeTab.classList.add('border-blue-600', 'text-blue-600');
+            }
+
+            // Show/Hide Sections
+            document.querySelectorAll('.dashboard-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById('section-' + tabName).classList.remove('hidden');
+
+            // Load data if needed
+            if (tabName === 'orders') {
+                loadUserOrders();
+            }
+            
+            // Update feathers
+            if(window.feather) feather.replace();
+        }
+
+        async function loadUserOrders() {
+            const container = document.getElementById('orders-container');
+            const token = localStorage.getItem('authToken');
+            
+            if (!token) return;
+
+            // Use apiBaseUrl from jerryTech instance or global
+            const apiBase = jerryTech ? jerryTech.apiBaseUrl : (window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://jeytech.onrender.com');
+
+            try {
+                const response = await fetch(`${apiBase}/api/orders`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const orders = await response.json();
+                    
+                    if (orders.length === 0) {
+                        container.innerHTML = `
+                            <div class="text-center py-12 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                                <div class="bg-white p-4 rounded-full inline-block mb-3 shadow-sm">
+                                    <i data-feather="package" class="h-8 w-8 text-gray-300"></i>
+                                </div>
+                                <h4 class="text-gray-900 font-medium mb-1">Aucune commande</h4>
+                                <p class="text-gray-500 mb-4">Vous n'avez pas encore passé de commande.</p>
+                                <a href="products.html" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                    Commencer mes achats
+                                </a>
+                            </div>
+                        `;
+                    } else {
+                        container.innerHTML = orders.map(order => `
+                            <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                                <div class="flex flex-col md:flex-row justify-between md:items-center mb-4 pb-4 border-b border-gray-100">
+                                    <div>
+                                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Commande</span>
+                                        <h4 class="text-lg font-bold text-gray-900">#${order.id}</h4>
+                                        <p class="text-sm text-gray-500">${new Date(order.created_at).toLocaleDateString('fr-FR', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute:'2-digit'})}</p>
+                                    </div>
+                                    <div class="mt-2 md:mt-0 flex items-center">
+                                        <span class="px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.status)}">
+                                            ${getStatusText(order.status)}
+                                        </span>
+                                        <span class="ml-4 text-xl font-bold text-blue-600">${jerryTech.formatPrice(order.total)}</span>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    ${order.items.map(item => `
+                                        <div class="flex justify-between text-sm text-gray-600">
+                                            <span>${item.quantity}x Produit #${item.product_id}</span>
+                                            <span class="font-medium">${jerryTech.formatPrice(item.price)}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                } else {
+                    container.innerHTML = '<p class="text-center text-red-500 py-8">Erreur lors du chargement des commandes.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                container.innerHTML = '<p class="text-center text-red-500 py-8">Impossible de contacter le serveur.</p>';
+            }
+            if(window.feather) feather.replace();
+        }
+
+        function getStatusColor(status) {
+            switch(status) {
+                case 'completed': return 'bg-green-100 text-green-800';
+                case 'processing': return 'bg-blue-100 text-blue-800';
+                case 'cancelled': return 'bg-red-100 text-red-800';
+                default: return 'bg-yellow-100 text-yellow-800';
+            }
+        }
+
+        function getStatusText(status) {
+            switch(status) {
+                case 'completed': return 'Livrée';
+                case 'processing': return 'En cours';
+                case 'cancelled': return 'Annulée';
+                default: return 'En attente';
+            }
+        }
+
+        function updateProfile(e) {
+            e.preventDefault();
+            jerryTech.showNotification('Mise à jour du profil bientôt disponible', 'info');
+        }
     </script>
 </body>
 </html>

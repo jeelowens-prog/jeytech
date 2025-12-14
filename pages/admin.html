@@ -40,7 +40,7 @@
                 <!-- Logo -->
                 <div class="flex items-center">
                     <div class="flex items-center space-x-2">
-                        <img src="../resources/logo.png" alt="JerryTech" class="h-8 w-auto filter brightness-0 invert">
+                        <img src="../resources/logo.png" alt="JerryTech" class="h-8 w-auto">
                         <span class="font-display font-bold text-xl">JerryTech Admin</span>
                     </div>
                 </div>
@@ -101,6 +101,13 @@
                     <i data-feather="settings" class="h-5 w-5"></i>
                     <span>Paramètres</span>
                 </button>
+                <!--retour vers index.html-->
+                <button onclick="window.location.href = '../index.html'" class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3">
+                    <i data-feather="home" class="h-5 w-5"></i>
+                    <span>Retour vers index</span>
+                </button>
+                
+
             </nav>
         </div>
 
@@ -480,8 +487,8 @@
         let currentSection = 'dashboard';
         let adminToken = localStorage.getItem('authToken');
         let apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-            ? 'http://localhost:8000' 
-            : 'https://api.jerrytech.ht';
+            ? 'http://localhost:5000' 
+            : 'https://jeytech.onrender.com';
 
         // Initialize admin panel
         document.addEventListener('DOMContentLoaded', async () => {
