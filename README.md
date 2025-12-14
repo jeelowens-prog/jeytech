@@ -135,3 +135,8 @@ Modifiez SECRET_KEY dans ackend/auth.py pour la production.
 ## 📄 Licence
 
 Ce projet est un exemple éducatif.
+
+
+<!-- TODO: Ajouter une section sur le déploiement -->
+alembic revision --autogenerate -m "add age to user"
+alembic upgrade head
