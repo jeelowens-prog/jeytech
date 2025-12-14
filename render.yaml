@@ -4,9 +4,8 @@ services:
     env: python
     region: frankfurt
     plan: free
-    rootDirectory: flask_backend
-    buildCommand: ./build.sh
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    buildCommand: cd flask_backend && chmod +x build.sh && ./build.sh
+    startCommand: cd flask_backend && gunicorn app:app --bind 0.0.0.0:$PORT
     healthCheckPath: /health
     envVars:
       - key: FLASK_ENV
