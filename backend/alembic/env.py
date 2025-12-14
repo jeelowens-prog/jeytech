@@ -10,7 +10,7 @@ from alembic import context
 # Add parent directory to path to import models and database
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from database import SQLALCHEMY_DATABASE_URL
+from database import DATABASE_URL as SQLALCHEMY_DATABASE_URL
 from models import Base
 
 # this is the Alembic Config object, which provides
