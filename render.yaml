@@ -2,7 +2,7 @@ services:
   - type: web
     name: jeytech-api
     env: python
-    pythonVersion: 3.11.9
+    pythonVersion: "3.11.9"
     plan: free
     region: frankfurt
     buildCommand: pip3 install -r backend/requirements.txt && alembic -c backend/alembic.ini upgrade head
