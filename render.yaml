@@ -4,7 +4,7 @@ services:
     env: python
     plan: free
     region: frankfurt
-    rootDir: backend          # Render travaille dans backend/
-    buildCommand: bash build.sh
+    rootDir: backend
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt && python -m alembic upgrade head
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     autoDeploy: true
