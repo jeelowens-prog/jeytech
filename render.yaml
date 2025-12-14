@@ -4,7 +4,7 @@ services:
     env: python
     region: frankfurt
     plan: free
-    buildCommand: cd flask_backend && chmod +x build.sh && ./build.sh
+    buildCommand: cd flask_backend && pip install -r requirements.txt && flask db upgrade
     startCommand: cd flask_backend && gunicorn app:app --bind 0.0.0.0:$PORT
     healthCheckPath: /health
     envVars:
