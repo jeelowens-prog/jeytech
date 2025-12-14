@@ -2,9 +2,9 @@ services:
   - type: web
     name: jeytech-api
     env: python
-    pythonVersion: "3.11.9"
     plan: free
     region: frankfurt
-    buildCommand: pip3 install -r backend/requirements.txt && alembic -c backend/alembic.ini upgrade head
-    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    rootDir: backend
+    buildCommand: poetry install --no-root && alembic -c alembic.ini upgrade head
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     autoDeploy: true
