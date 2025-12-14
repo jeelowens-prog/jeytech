@@ -5,6 +5,6 @@ services:
     plan: free
     region: frankfurt
     rootDir: backend
-    buildCommand: python3 -m pip install --upgrade pip && python3 -m pip install -r requirements.txt && python3 -m alembic upgrade head
+    buildCommand: pip3 install -r requirements.txt && alembic upgrade head
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     autoDeploy: true
