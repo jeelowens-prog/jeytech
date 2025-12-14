@@ -4,7 +4,6 @@ services:
     env: python
     plan: free
     region: frankfurt
-    rootDir: backend
-    buildCommand: pip3 install -r requirements.txt && alembic upgrade head
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    buildCommand: pip3 install -r backend/requirements.txt && alembic -c backend/alembic.ini upgrade head
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
     autoDeploy: true
