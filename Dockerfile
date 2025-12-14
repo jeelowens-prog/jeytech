@@ -3,6 +3,7 @@ FROM python:3.11-slim
 
 # Définir le dossier de travail
 WORKDIR /app
+ENV PYTHONPATH=/app/backend
 
 # Installer les dépendances système nécessaires
 RUN apt-get update && apt-get install -y \
@@ -13,6 +14,7 @@ RUN apt-get update && apt-get install -y \
 
 # Installer Poetry
 RUN pip install --no-cache-dir "poetry==2.2.1"
+RUN poetry config virtualenvs.create false
 
 # Copier les fichiers nécessaires
 COPY pyproject.toml poetry.lock* ./
@@ -26,10 +28,10 @@ COPY main.js ./
 RUN poetry install --no-root --no-interaction
 
 # Exécuter Alembic pour les migrations via Poetry
-RUN poetry run alembic -c backend/alembic.ini upgrade head
+RUN alembic -c backend/alembic.ini upgrade head
 
 # Exposer le port pour Render
 EXPOSE 8000
 
 # Commande de démarrage
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
