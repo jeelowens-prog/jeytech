@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Installer Poetry
-RUN pip install --no-cache-dir "poetry==1.7.6"
+RUN pip install --no-cache-dir "poetry==2.2.1"
 
 # Copier les fichiers nécessaires
 COPY pyproject.toml poetry.lock* ./
@@ -28,7 +28,7 @@ RUN poetry install --no-root --no-interaction
 # Exécuter Alembic pour les migrations
 RUN alembic -c backend/alembic.ini upgrade head
 
-# Exposer le port
+# Exposer le port pour Render
 EXPOSE 8000
 
 # Commande de démarrage
