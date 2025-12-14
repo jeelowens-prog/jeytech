@@ -6,7 +6,7 @@ class JerryTech {
         // Utiliser l'API locale en développement, ou l'URL de production
         this.apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? 'http://localhost:5000'
-            : 'https://jeytech.onrender.com';
+            : 'https://jerrytech-api.onrender.com/';
         this.cart = this.loadCart();
         this.token = localStorage.getItem('authToken');
         this.init();
